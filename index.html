@@ -24,7 +24,7 @@ html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:var(--bg)
 .btn{width:100%;padding:14px 20px;background:linear-gradient(135deg,var(--blue),#1a3066);border:1px solid rgba(100,140,255,0.3);border-radius:12px;color:#e0e8ff;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn:active{transform:scale(0.97)}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#66501a);border-color:rgba(255,200,100,0.3);color:#fff3d4}
-.btn-off{opacity:.35;pointer-events:none}
+.btn-off{opacity:.35;cursor:not-allowed}
 .btn-sm{padding:10px 16px;font-size:13px}
 .title{font-size:28px;font-weight:800;background:linear-gradient(135deg,#c8d8ff,#ffd4a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;letter-spacing:-.5px}
 .back-btn{background:none;border:none;color:var(--sub);cursor:pointer;font-size:14px;margin-bottom:16px;font-family:inherit;text-align:left;padding:0}
@@ -220,7 +220,7 @@ function listenTeams() {
       });
       S.arrived = newArrived;
       S.teamData = teamData;
-      render();
+      if (S.view !== 'scan') render();
     });
 }
 
@@ -232,7 +232,7 @@ function listenState() {
       const d = doc.data();
       S.msgSent = !!d.messageSent;
       S.photoUrl = d.photoUrl || '';
-      render();
+      if (S.view !== 'scan') render();
     }
   });
 }
@@ -241,35 +241,50 @@ function listenState() {
 //  QR 스캐너
 // ════════════════════════════════════════════════
 let qrScanner = null;
+let qrStopping = false;
 
 function startQrScan(onResult) {
   const el = document.getElementById('qr-reader');
-  if (!el) return;
-  qrScanner = new Html5Qrcode('qr-reader');
-  qrScanner.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: { width: 220, height: 220 } },
-    (decoded) => {
-      stopQrScan();
-      onResult(decoded.trim());
-    },
-    () => {} // ignore errors
-  ).catch(err => {
-    console.warn('카메라 접근 실패:', err);
-    // 카메라 실패 시 수동 입력 모드 표시
-    S.qrScanning = false;
-    render();
-  });
-  S.qrScanning = true;
+  if (!el || qrStopping) return;
+  try {
+    qrScanner = new Html5Qrcode('qr-reader');
+    qrScanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 220, height: 220 } },
+      (decoded) => {
+        const code = decoded.trim();
+        stopQrScan();
+        onResult(code);
+      },
+      () => {}
+    ).catch(err => {
+      console.warn('카메라 접근 실패:', err);
+      // 카메라 실패해도 render 하지 않음 — 수동 입력이 이미 표시되어 있음
+      qrScanner = null;
+    });
+  } catch(e) {
+    console.warn('QR 초기화 실패:', e);
+    qrScanner = null;
+  }
 }
 
 function stopQrScan() {
-  if (qrScanner) {
-    qrScanner.stop().catch(() => {});
-    qrScanner.clear();
-    qrScanner = null;
+  if (qrStopping) return;
+  const scanner = qrScanner;
+  qrScanner = null;
+  if (!scanner) return;
+  qrStopping = true;
+  try {
+    scanner.stop().then(() => {
+      try { scanner.clear(); } catch(e) {}
+      qrStopping = false;
+    }).catch(() => {
+      try { scanner.clear(); } catch(e) {}
+      qrStopping = false;
+    });
+  } catch(e) {
+    qrStopping = false;
   }
-  S.qrScanning = false;
 }
 
 // ════════════════════════════════════════════════
@@ -323,7 +338,6 @@ const $ = id => document.getElementById(id);
 const app = () => document.getElementById('app');
 
 function render() {
-  stopQrScan(); // 화면 전환 시 스캐너 정리
   const v = S.view;
   if (v === 'splash') renderSplash();
   else if (v === 'adminPw') renderAdminPw();
@@ -418,22 +432,29 @@ function renderMemberInput() {
         ${S.members.length > 1 ? `<button class="btn btn-sm" style="flex:1;background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15);color:rgba(255,150,150,0.6);font-size:13px" onclick="S.members.pop();render()">− 삭제</button>` : ''}
       </div>
     </div>
-    <button class="btn ${S.members.some(m=>m.trim())?'':'btn-off'}" style="margin-top:16px" id="start-btn">탐험 시작!</button>
+    <button class="btn" style="margin-top:16px" id="start-btn">탐험 시작!</button>
   </div>`;
   // 입력 바인딩
+  const updateBtn = () => {
+    const btn = $('start-btn');
+    const hasName = S.members.some(m => m.trim());
+    if (btn) { btn.classList.toggle('btn-off', !hasName); }
+  };
   document.querySelectorAll('.member-input').forEach(inp => {
-    inp.addEventListener('input', e => { S.members[+e.target.dataset.idx] = e.target.value; });
-  });
-  const startBtn = $('start-btn');
-  if (startBtn && S.members.some(m => m.trim())) {
-    startBtn.addEventListener('click', async () => {
-      S.stage = 0;
-      await registerTeam(S.team, S.members);
-      listenState(); // 학생도 state 리스닝 (메시지/사진)
-      listenTeams(); // 도착 현황 리스닝
-      go('quiz');
+    inp.addEventListener('input', e => {
+      S.members[+e.target.dataset.idx] = e.target.value;
+      updateBtn();
     });
-  }
+  });
+  updateBtn();
+  $('start-btn').addEventListener('click', async () => {
+    if (!S.members.some(m => m.trim())) return;
+    S.stage = 0;
+    await registerTeam(S.team, S.members);
+    listenState();
+    listenTeams();
+    go('quiz');
+  });
 }
 
 // ── 퀴즈 ──
@@ -495,11 +516,13 @@ function renderScan() {
       <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">QR코드 스캔</h3>
       <p style="font-size:13px;color:var(--dim);margin-bottom:16px">목적지의 QR코드를 카메라로 비춰주세요</p>
       <div id="qr-reader"></div>
-      <p id="qr-manual-label" style="display:none;font-size:12px;color:var(--dim);margin-bottom:8px">카메라를 사용할 수 없는 경우 코드를 직접 입력하세요</p>
-      <input id="qr-manual" class="input" style="display:none;text-align:center;margin-bottom:8px" placeholder="QR 코드 입력">
-      <button id="qr-manual-btn" class="btn btn-sm" style="display:none;margin-bottom:12px">확인</button>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <p style="font-size:12px;color:var(--dim);margin-bottom:8px">카메라가 안 될 경우 코드를 직접 입력하세요</p>
+        <input id="qr-manual" class="input" style="text-align:center;margin-bottom:8px" placeholder="QR 코드 입력">
+        <button id="qr-manual-btn" class="btn btn-sm">확인</button>
+      </div>
     </div>
-    <button class="back-btn" style="text-align:center;margin-top:16px" onclick="go('hint')">← 힌트 다시 보기</button>
+    <button class="back-btn" style="text-align:center;margin-top:16px" id="scan-back-btn">← 힌트 다시 보기</button>
   </div>`;
 
   const handleResult = (code) => {
@@ -518,25 +541,20 @@ function renderScan() {
     }
   };
 
-  // 카메라 스캔 시도
+  // 뒤로가기
+  $('scan-back-btn').addEventListener('click', () => go('hint'));
+
+  // 수동 입력
+  const mi = $('qr-manual'), mb = $('qr-manual-btn');
+  mb.addEventListener('click', () => { if (mi.value.trim()) handleResult(mi.value.trim()); });
+  mi.addEventListener('keydown', e => { if (e.key === 'Enter' && mi.value.trim()) handleResult(mi.value.trim()); });
+
+  // 카메라 스캔 시도 (현재 뷰가 scan일 때만)
   setTimeout(() => {
-    try {
-      startQrScan(handleResult);
-    } catch(e) {
-      // 카메라 실패 → 수동 입력
+    if (S.view === 'scan') {
+      try { startQrScan(handleResult); } catch(e) { console.warn('QR 스캔 시작 실패', e); }
     }
-    // 3초 후에도 스캐너 안 되면 수동 입력 표시
-    setTimeout(() => {
-      const ml = $('qr-manual-label'), mi = $('qr-manual'), mb = $('qr-manual-btn');
-      if (ml) ml.style.display = 'block';
-      if (mi) mi.style.display = 'block';
-      if (mb) {
-        mb.style.display = 'block';
-        mb.addEventListener('click', () => { if (mi.value.trim()) handleResult(mi.value.trim()); });
-        mi.addEventListener('keydown', e => { if (e.key === 'Enter' && mi.value.trim()) handleResult(mi.value.trim()); });
-      }
-    }, 3000);
-  }, 100);
+  }, 300);
 }
 
 // ── 잘못된 QR ──
@@ -764,7 +782,7 @@ function renderAdminQr() {
 //  유틸
 // ════════════════════════════════════════════════
 function go(view) {
-  stopQrScan();
+  if (S.view === 'scan') stopQrScan();
   S.view = view;
   render();
   window.scrollTo(0, 0);
