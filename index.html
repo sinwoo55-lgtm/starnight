@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>별헤는밤</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<!-- QR Scanner -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#070b14;--card:rgba(255,255,255,0.035);--border:rgba(255,255,255,0.07);--text:#e8e6e3;--sub:rgba(200,210,230,0.45);--dim:rgba(200,210,230,0.25);--blue:#2d4a8a;--gold:#8a6d2d;--accent:#ffd07a}
+html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+#app{min-height:100vh;background:linear-gradient(170deg,#070b14 0%,#0e1528 40%,#0a1020 100%);position:relative}
+.wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:20px 16px;min-height:100vh;display:flex;flex-direction:column}
+.wrap.center{justify-content:center;align-items:center;text-align:center}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;backdrop-filter:blur(12px)}
+.btn{width:100%;padding:14px 20px;background:linear-gradient(135deg,var(--blue),#1a3066);border:1px solid rgba(100,140,255,0.3);border-radius:12px;color:#e0e8ff;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn:active{transform:scale(0.97)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#66501a);border-color:rgba(255,200,100,0.3);color:#fff3d4}
+.btn-off{opacity:.35;pointer-events:none}
+.btn-sm{padding:10px 16px;font-size:13px}
+.title{font-size:28px;font-weight:800;background:linear-gradient(135deg,#c8d8ff,#ffd4a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;letter-spacing:-.5px}
+.back-btn{background:none;border:none;color:var(--sub);cursor:pointer;font-size:14px;margin-bottom:16px;font-family:inherit;text-align:left;padding:0}
+.input{width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e0e8ff;font-size:14px;font-family:inherit;outline:none}
+.input:focus{border-color:rgba(100,140,255,0.4)}
+.tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;margin-bottom:16px}
+.dot{width:10px;height:10px;border-radius:50%;transition:all .3s}
+.dot.done{background:#6faaff}
+.dot.active{background:#ffd07a;box-shadow:0 0 8px rgba(255,208,122,.5)}
+.dot.idle{background:rgba(255,255,255,.12)}
+.option-btn{width:100%;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#e0e8ff;font-size:15px;cursor:pointer;transition:all .2s;text-align:left;font-family:inherit}
+.option-btn:active{background:rgba(255,255,255,0.08)}
+.option-btn.correct{background:rgba(80,200,120,0.2);border-color:rgba(80,200,120,0.5)}
+.option-btn.wrong{background:rgba(255,80,80,0.2);border-color:rgba(255,80,80,0.5);animation:shake .3s ease}
+.team-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.team-btn{padding:14px 8px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit;color:#e0e8ff}
+.team-btn.sel{background:rgba(255,255,255,0.06)}
+.team-circle{width:26px;height:26px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.badge{padding:3px 10px;border-radius:16px;font-size:11px;border:1px solid}
+.badge-on{background:rgba(80,200,120,0.15);color:#6fdf8a;border-color:rgba(80,200,120,0.25)}
+.badge-off{background:rgba(255,255,255,0.04);color:var(--sub);border-color:rgba(255,255,255,0.06)}
+.flash-circle{width:110px;height:110px;border-radius:50%;margin:16px auto;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:36px}
+.flash-off{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1)}
+.flash-on{background:radial-gradient(circle,#fffbe0 0%,#ffd54f 30%,rgba(255,213,79,0.3) 60%,transparent 80%);border:2px solid rgba(255,213,79,0.6);box-shadow:0 0 50px rgba(255,213,79,0.4)}
+#qr-reader{width:100%;max-width:280px;margin:0 auto 16px;border-radius:12px;overflow:hidden}
+#qr-reader video{border-radius:12px}
+/* 별 배경 */
+.starfield{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+/* QR 인쇄 */
+.qr-print-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.qr-item{text-align:center;padding:12px;background:white;border-radius:8px;break-inside:avoid}
+.qr-item canvas{display:block;margin:0 auto 8px}
+.qr-item p{color:#333;font-size:12px;font-weight:600;margin:0}
+.qr-item small{color:#666;font-size:10px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media print{.no-print{display:none!important}.qr-print-grid{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ════════════════════════════════════════════════
+//  🔧 Firebase 설정 (여기에 본인의 config 입력)
+// ════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAdX8xv8ksC9Wcc4SL1zgiUzcA63Z2sfVo",
+  authDomain: "star-174ed.firebaseapp.com",
+  projectId: "star-174ed",
+  storageBucket: "star-174ed.firebasestorage.app",
+  messagingSenderId: "389818775278",
+  appId: "1:389818775278:web:9ef8f44ec13bf6330325ff"
+};
+
+// Firestore 컬렉션 이름
+const COLLECTION = "starnight";
+
+// ════════════════════════════════════════════════
+//  데이터
+// ════════════════════════════════════════════════
+const COLORS = ["#ff6b6b","#ffa94d","#ffd43b","#69db7c","#4dabf7","#9775fa","#f06595","#20c997","#e599f7","#74c0fc"];
+
+const STARS_ADMIN = [
+  {ko:"데네브",en:"Deneb",part:"백조자리 α (꼬리)"},
+  {ko:"사드르",en:"Sadr",part:"백조자리 γ (몸통)"},
+  {ko:"에타",en:"η Cyg",part:"백조자리 η (목)"},
+  {ko:"알비레오",en:"Albireo",part:"백조자리 β (머리)"},
+  {ko:"제타",en:"ζ Cyg",part:"백조자리 ζ (날개)"},
+  {ko:"기에나",en:"Gienah",part:"백조자리 ε (날개끝)"},
+  {ko:"델타",en:"δ Cyg",part:"백조자리 δ (날개)"},
+  {ko:"카파",en:"κ Cyg",part:"백조자리 κ (날개끝)"},
+  {ko:"베가",en:"Vega",part:"거문고자리 α"},
+  {ko:"알타이르",en:"Altair",part:"독수리자리 α"},
+];
+
+const POS = [
+  {x:130,y:25},{x:200,y:115},{x:245,y:172},{x:285,y:225},
+  {x:285,y:80},{x:355,y:55},{x:118,y:155},{x:50,y:190},
+  {x:435,y:148},{x:220,y:400}
+];
+const CYGNUS_LINES = [[0,1],[1,2],[2,3],[1,4],[4,5],[1,6],[6,7]];
+const TRI_LINES = [[0,8],[0,9],[8,9]];
+
+const QUIZZES = [
+  [{question:"여름철 대삼각형을 이루는 세 별이 아닌 것은?",options:["베가","데네브","알타이르","시리우스"],answer:3,hint:"📚 다음 장소: 이야기가 잠든 곳, 책 사이에 숨겨진 비밀을 찾아라!",qrId:"T01S1"},{question:"백조자리의 꼬리에 위치한 1등성의 이름은?",options:["알비레오","데네브","사드르","베가"],answer:1,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T01S2"},{question:"세상에서 가장 빠른 별은?",options:["유성","혜성","연예인 별","모닝스타"],answer:2,hint:"🎵 다음 장소: 음표가 춤추는 공간으로 가라!",qrId:"T01S3"},{question:"지구에서 달까지의 평균 거리는 약 얼마일까요?",options:["38만 km","150만 km","1만 km","3800 km"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T01F"}],
+  [{question:"백조자리의 머리(부리) 부분에 해당하는 이중성은?",options:["데네브","사드르","알비레오","기에나"],answer:2,hint:"🎨 색과 형태의 공간으로 가라!",qrId:"T02S1"},{question:"거문고자리에서 가장 밝은 별은?",options:["알타이르","데네브","베가","폴룩스"],answer:2,hint:"🍽️ 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T02S2"},{question:"하늘에서 가장 게으른 별은?",options:["북극성","낮잠별","잠자리별","누워별"],answer:0,hint:"💻 디지털 세계로 통하는 문이 있는 곳!",qrId:"T02S3"},{question:"태양계에서 가장 큰 행성은?",options:["토성","목성","해왕성","천왕성"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T02F"}],
+  [{question:"독수리자리에서 가장 밝은 별의 이름은?",options:["베가","알타이르","데네브","레굴루스"],answer:1,hint:"🏃 땀과 열정의 넓은 실내 공간으로!",qrId:"T03S1"},{question:"백조자리의 중심(가슴)에 위치한 별은?",options:["데네브","알비레오","사드르","에타"],answer:2,hint:"📚 이야기가 잠든 곳으로!",qrId:"T03S2"},{question:"별이 시험을 못 보면 뭐라고 할까?",options:["별로야","스타벅스","별수없지","반짝반짝"],answer:2,hint:"🔬 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T03S3"},{question:"조선시대 천문 관측 기관의 이름은?",options:["사헌부","관상감","승정원","홍문관"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T03F"}],
+  [{question:"견우와 직녀 설화에서 견우성(알타이르)이 속한 별자리는?",options:["백조자리","거문고자리","독수리자리","사자자리"],answer:2,hint:"🎵 음표가 춤추는 공간으로!",qrId:"T04S1"},{question:"알비레오는 망원경으로 보면 두 가지 색이 보입니다. 어떤 조합?",options:["빨강+파랑","노랑+파랑","흰색+빨강","초록+보라"],answer:1,hint:"🎨 색과 형태의 공간으로!",qrId:"T04S2"},{question:"우주에서 가장 맛있는 음식은?",options:["화성바","은하수","밀키웨이","스타크래프트"],answer:2,hint:"🍽️ 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T04S3"},{question:"생텍쥐페리의 '어린 왕자'에서 어린 왕자가 살던 곳은?",options:["달","소행성 B612","화성","목성"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T04F"}],
+  [{question:"백조자리는 다른 이름으로 무엇이라 불릴까요?",options:["남십자성","북십자성","동십자성","서십자성"],answer:1,hint:"💻 디지털 세계로 통하는 문으로!",qrId:"T05S1"},{question:"베가(직녀성)가 속한 별자리의 한국 이름은?",options:["독수리자리","거문고자리","백조자리","물병자리"],answer:1,hint:"🏃 땀과 열정의 넓은 실내 공간으로!",qrId:"T05S2"},{question:"별들이 회의를 하면?",options:["스타회의","별자리","성회","별의별 회의"],answer:2,hint:"📺 큰 화면이 있는 어두운 공간으로!",qrId:"T05S3"},{question:"1광년은 빛이 얼마 동안 이동하는 거리일까요?",options:["1일","1달","1년","100년"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T05F"}],
+  [{question:"여름 밤하늘의 은하수를 가로지르는 별자리는?",options:["오리온자리","백조자리","사자자리","물고기자리"],answer:1,hint:"📚 이야기가 잠든 곳으로!",qrId:"T06S1"},{question:"밤하늘에서 가장 밝은 별은?",options:["북극성","시리우스","베가","카노푸스"],answer:1,hint:"🔬 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T06S2"},{question:"달이 화가 나면 뭐라고 할까?",options:["월화수목","달걀","초승달면","반달이야"],answer:0,hint:"🎵 음표가 춤추는 공간으로!",qrId:"T06S3"},{question:"칸트가 '별이 빛나는 하늘'과 함께 경외심을 느낀다고 한 것은?",options:["자연의 아름다움","마음속의 도덕법칙","신의 존재","인간의 이성"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T06F"}],
+  [{question:"데네브의 실제 밝기는 태양의 약 몇 배일까요?",options:["10배","1,000배","20만 배","1억 배"],answer:2,hint:"🎨 색과 형태의 공간으로!",qrId:"T07S1"},{question:"별의 색깔이 파란색이면 온도는?",options:["매우 낮다","보통이다","매우 높다","관계없다"],answer:2,hint:"🍽️ 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T07S2"},{question:"태양이 학교에 가면?",options:["해교","일학","태양학교","광학"],answer:0,hint:"💻 디지털 세계로 통하는 문으로!",qrId:"T07S3"},{question:"고흐가 그린 유명한 밤하늘 그림의 제목은?",options:["해바라기","별이 빛나는 밤","아를의 밤","감자 먹는 사람들"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T07F"}],
+  [{question:"국제천문연맹(IAU)이 공인한 별자리의 총 개수는?",options:["48개","66개","88개","108개"],answer:2,hint:"📺 큰 화면이 있는 어두운 공간으로!",qrId:"T08S1"},{question:"견우와 직녀가 만난다는 다리를 놓는 새는?",options:["독수리","백조","까치","학"],answer:2,hint:"📚 이야기가 잠든 곳으로!",qrId:"T08S2"},{question:"지구가 노래를 부르면?",options:["지구본","어스송","월드뮤직","자전거"],answer:3,hint:"🏃 땀과 열정의 넓은 실내 공간으로!",qrId:"T08S3"},{question:"블랙홀의 경계면, 빛도 탈출할 수 없는 지점은?",options:["코로나","사건의 지평선","광구","성운"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T08F"}],
+  [{question:"직녀성(베가)의 겉보기 등급은 약 몇 등급?",options:["0등급","1등급","3등급","5등급"],answer:0,hint:"🔬 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T09S1"},{question:"세종대왕이 만든 천문 관측 기구는?",options:["혼천의","앙부일구","자격루","측우기"],answer:0,hint:"🎵 음표가 춤추는 공간으로!",qrId:"T09S2"},{question:"화성인이 지구에 오면 제일 먼저 하는 일은?",options:["여권 발급","착륙","환전","인증샷"],answer:1,hint:"🎨 색과 형태의 공간으로!",qrId:"T09S3"},{question:"윤동주의 '별 헤는 밤'에서 별 하나에 담은 것이 아닌 것은?",options:["추억","사랑","복수","동경"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T09F"}],
+  [{question:"알타이르(견우성)까지의 거리는 약 몇 광년?",options:["4광년","17광년","100광년","1000광년"],answer:1,hint:"🍽️ 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T10S1"},{question:"허블 우주 망원경의 이름은 누구에게서 따왔을까요?",options:["갈릴레오","에드윈 허블","아인슈타인","호킹"],answer:1,hint:"💻 디지털 세계로 통하는 문으로!",qrId:"T10S2"},{question:"우주에서 제일 추운 곳은?",options:["명왕성","겨울왕국","냉장고","부메랑 성운"],answer:3,hint:"📺 큰 화면이 있는 어두운 공간으로!",qrId:"T10S3"},{question:"이육사의 시 '광야'에서 '백마 타고 오는 초인'이 상징하는 것은?",options:["자연의 힘","광복과 희망","계절의 변화","과학의 발전"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T10F"}],
+];
+
+// ════════════════════════════════════════════════
+//  앱 상태
+// ════════════════════════════════════════════════
+let S = {
+  view: 'splash', team: null, members: ['','',''], stage: 0,
+  arrived: Array(10).fill(false), msgSent: false, photoUrl: '',
+  flashOn: false, adminPw: '', pwError: false,
+  adminTaps: 0, tapTimer: null, qrScanning: false,
+  // Firestore에서 실시간으로 받아오는 팀 데이터
+  teamData: {} // { team_0: {members, stage, arrived}, ... }
+};
+
+let db, storage, unsubTeams, unsubState;
+
+// ════════════════════════════════════════════════
+//  Firebase
+// ════════════════════════════════════════════════
+function initFirebase() {
+  try {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    storage = firebase.storage();
+    console.log('Firebase 초기화 완료');
+  } catch(e) {
+    console.warn('Firebase 초기화 실패:', e.message);
+  }
+}
+
+// 팀 등록
+async function registerTeam(teamNum, members) {
+  if (!db) return;
+  const id = 'team_' + teamNum;
+  await db.collection(COLLECTION).doc(id).set({
+    teamNumber: teamNum,
+    members: members.filter(m => m.trim()),
+    currentStage: 0,
+    arrived: false,
+    joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+// 스테이지 업데이트
+async function updateStage(teamNum, newStage) {
+  if (!db) return;
+  await db.collection(COLLECTION).doc('team_' + teamNum).update({ currentStage: newStage });
+}
+
+// 최종 도착 기록
+async function markArrived(teamNum) {
+  if (!db) return;
+  await db.collection(COLLECTION).doc('team_' + teamNum).update({ arrived: true });
+}
+
+// 관리자: 메시지 전송
+async function sendMessage() {
+  if (!db) return;
+  await db.collection(COLLECTION).doc('_state').set({ messageSent: true, photoUrl: S.photoUrl || '' }, { merge: true });
+}
+
+// 관리자: 사진 업로드
+async function uploadPhoto(file) {
+  if (!storage) return null;
+  const ref = storage.ref().child('starnight/result_' + Date.now() + '.jpg');
+  await ref.put(file);
+  const url = await ref.getDownloadURL();
+  await db.collection(COLLECTION).doc('_state').set({ photoUrl: url }, { merge: true });
+  return url;
+}
+
+// 관리자: 게임 초기화
+async function resetGame() {
+  if (!db) return;
+  const batch = db.batch();
+  batch.set(db.collection(COLLECTION).doc('_state'), { messageSent: false, photoUrl: '' });
+  for (let i = 0; i < 10; i++) {
+    batch.delete(db.collection(COLLECTION).doc('team_' + i));
+  }
+  await batch.commit();
+}
+
+// 실시간 리스너: 팀 상태
+function listenTeams() {
+  if (!db) return;
+  unsubTeams = db.collection(COLLECTION)
+    .where(firebase.firestore.FieldPath.documentId(), '!=', '_state')
+    .onSnapshot(snap => {
+      const newArrived = Array(10).fill(false);
+      const teamData = {};
+      snap.forEach(doc => {
+        const d = doc.data();
+        const idx = d.teamNumber;
+        if (idx !== undefined) {
+          newArrived[idx] = !!d.arrived;
+          teamData['team_' + idx] = d;
+        }
+      });
+      S.arrived = newArrived;
+      S.teamData = teamData;
+      render();
+    });
+}
+
+// 실시간 리스너: 게임 상태 (메시지/사진)
+function listenState() {
+  if (!db) return;
+  unsubState = db.collection(COLLECTION).doc('_state').onSnapshot(doc => {
+    if (doc.exists) {
+      const d = doc.data();
+      S.msgSent = !!d.messageSent;
+      S.photoUrl = d.photoUrl || '';
+      render();
+    }
+  });
+}
+
+// ════════════════════════════════════════════════
+//  QR 스캐너
+// ════════════════════════════════════════════════
+let qrScanner = null;
+
+function startQrScan(onResult) {
+  const el = document.getElementById('qr-reader');
+  if (!el) return;
+  qrScanner = new Html5Qrcode('qr-reader');
+  qrScanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 220, height: 220 } },
+    (decoded) => {
+      stopQrScan();
+      onResult(decoded.trim());
+    },
+    () => {} // ignore errors
+  ).catch(err => {
+    console.warn('카메라 접근 실패:', err);
+    // 카메라 실패 시 수동 입력 모드 표시
+    S.qrScanning = false;
+    render();
+  });
+  S.qrScanning = true;
+}
+
+function stopQrScan() {
+  if (qrScanner) {
+    qrScanner.stop().catch(() => {});
+    qrScanner.clear();
+    qrScanner = null;
+  }
+  S.qrScanning = false;
+}
+
+// ════════════════════════════════════════════════
+//  별 배경 생성
+// ════════════════════════════════════════════════
+const STAR_FIELD = Array.from({length:90}, () => ({
+  x: Math.random()*100, y: Math.random()*100,
+  r: Math.random()*2+0.4, d: Math.random()*4, t: Math.random()*2.5+1.5
+}));
+
+function starFieldSVG() {
+  return `<div class="starfield"><svg width="100%" height="100%" style="position:absolute">${
+    STAR_FIELD.map(s => `<circle cx="${s.x}%" cy="${s.y}%" r="${s.r}" fill="white" opacity=".5"><animate attributeName="opacity" values=".2;.8;.2" dur="${s.t}s" begin="${s.d}s" repeatCount="indefinite"/></circle>`).join('')
+  }</svg></div>`;
+}
+
+// ════════════════════════════════════════════════
+//  별자리 SVG (관리자 전용)
+// ════════════════════════════════════════════════
+function constellationSVG(arr, width) {
+  const w = width || 360;
+  let svg = `<svg viewBox="-10 -10 520 450" width="${w}" style="margin:0 auto;display:block">`;
+  // 삼각형 점선
+  TRI_LINES.forEach(([a,b]) => {
+    const on = arr[a] && arr[b];
+    svg += `<line x1="${POS[a].x}" y1="${POS[a].y}" x2="${POS[b].x}" y2="${POS[b].y}" stroke="${on?'rgba(255,200,100,0.25)':'rgba(255,255,255,0.05)'}" stroke-width="1" stroke-dasharray="8,6"/>`;
+  });
+  // 백조자리 실선
+  CYGNUS_LINES.forEach(([a,b]) => {
+    const on = arr[a] && arr[b];
+    svg += `<line x1="${POS[a].x}" y1="${POS[a].y}" x2="${POS[b].x}" y2="${POS[b].y}" stroke="${on?'rgba(180,210,255,0.5)':'rgba(255,255,255,0.07)'}" stroke-width="${on?2:1}" stroke-dasharray="${on?'none':'4,4'}"/>`;
+  });
+  // 별
+  POS.forEach((p,i) => {
+    if (arr[i]) {
+      svg += `<circle cx="${p.x}" cy="${p.y}" r="16" fill="none" stroke="rgba(255,220,100,0.3)" stroke-width="1"><animate attributeName="r" values="10;20;10" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".4;.1;.4" dur="2s" repeatCount="indefinite"/></circle>`;
+    }
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="${arr[i]?6:3.5}" fill="${arr[i]?'#ffd54f':'rgba(255,255,255,0.18)'}" style="transition:all .5s;${arr[i]?'filter:drop-shadow(0 0 5px rgba(255,213,79,0.7))':''}"/>`;
+    svg += `<text x="${p.x}" y="${p.y-12}" text-anchor="middle" font-size="10" fill="${arr[i]?'#ffd07a':'rgba(255,255,255,0.2)'}" font-family="'Noto Sans KR',sans-serif">${i+1}모둠</text>`;
+    svg += `<text x="${p.x}" y="${p.y+18}" text-anchor="middle" font-size="8" fill="${arr[i]?'rgba(255,208,122,0.6)':'rgba(255,255,255,0.12)'}" font-family="'Noto Sans KR',sans-serif">${STARS_ADMIN[i].ko}</text>`;
+  });
+  svg += `<text x="250" y="435" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.12)" font-family="'Noto Sans KR',sans-serif">여름 대삼각형 + 백조자리</text>`;
+  svg += `</svg>`;
+  return svg;
+}
+
+// ════════════════════════════════════════════════
+//  렌더링
+// ════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const app = () => document.getElementById('app');
+
+function render() {
+  stopQrScan(); // 화면 전환 시 스캐너 정리
+  const v = S.view;
+  if (v === 'splash') renderSplash();
+  else if (v === 'adminPw') renderAdminPw();
+  else if (v === 'teamSelect') renderTeamSelect();
+  else if (v === 'memberInput') renderMemberInput();
+  else if (v === 'quiz') renderQuiz();
+  else if (v === 'hint') renderHint();
+  else if (v === 'scan') renderScan();
+  else if (v === 'wrong') renderWrong();
+  else if (v === 'arrived') renderArrived();
+  else if (v === 'admin') renderAdmin();
+  else if (v === 'adminQr') renderAdminQr();
+}
+
+// ── 스플래시 ──
+function renderSplash() {
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div style="font-size:56px;margin-bottom:16px">✦</div>
+    <h1 class="title" id="splash-title" style="font-size:36px;margin-bottom:4px;cursor:default;user-select:none">별헤는밤</h1>
+    <p style="font-size:15px;color:var(--sub);margin-bottom:8px">도개중고등학교 천문·인문학 체험 행사</p>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:40px">숨겨진 장소를 찾아 퀴즈를 풀어보세요</p>
+    <button class="btn" onclick="go('teamSelect')">시작하기</button>
+  </div>`;
+  // 관리자 5탭 (시각적 변화 없음)
+  $('splash-title').addEventListener('click', () => {
+    S.adminTaps++;
+    if (S.tapTimer) clearTimeout(S.tapTimer);
+    if (S.adminTaps >= 5) { S.adminTaps = 0; go('adminPw'); return; }
+    S.tapTimer = setTimeout(() => S.adminTaps = 0, 2000);
+  });
+}
+
+// ── 관리자 비밀번호 ──
+function renderAdminPw() {
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div class="card">
+      <div style="font-size:32px;margin-bottom:16px">🔒</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:16px">관리자 인증</h3>
+      <input class="input" id="pw-input" type="text" placeholder="비밀번호 입력" style="text-align:center;font-size:18px;margin-bottom:12px" value="${S.adminPw}">
+      ${S.pwError ? '<p style="font-size:13px;color:#ff8a8a;margin-bottom:12px">비밀번호가 올바르지 않습니다</p>' : ''}
+      <button class="btn" id="pw-submit">확인</button>
+      <button class="back-btn" style="text-align:center;width:100%;margin-top:12px" onclick="S.adminPw='';S.pwError=false;go('splash')">취소</button>
+    </div>
+  </div>`;
+  const inp = $('pw-input');
+  inp.focus();
+  const tryPw = () => {
+    if (inp.value === '윤동주') { S.adminPw=''; S.pwError=false; go('admin'); listenTeams(); listenState(); }
+    else { S.pwError = true; S.adminPw = inp.value; render(); }
+  };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') tryPw(); });
+  $('pw-submit').addEventListener('click', tryPw);
+}
+
+// ── 모둠 선택 ──
+function renderTeamSelect() {
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap">
+    <button class="back-btn" onclick="go('splash')">← 뒤로</button>
+    <h2 class="title">모둠을 선택하세요</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠 번호를 선택한 뒤 탐험을 시작합니다</p>
+    <div class="team-grid">
+      ${Array.from({length:10},(_,i) => `
+        <button class="team-btn ${S.team===i?'sel':''}" onclick="S.team=${i};render()" style="${S.team===i?`background:${COLORS[i]}18;border-color:${COLORS[i]}60`:''}">
+          <div class="team-circle" style="background:${COLORS[i]}25;border:2px solid ${COLORS[i]}50;color:${COLORS[i]}">${i+1}</div>
+          <div style="font-size:14px;font-weight:700">${i+1}모둠</div>
+        </button>
+      `).join('')}
+    </div>
+    ${S.team !== null ? `<button class="btn" onclick="go('memberInput')">${S.team+1}모둠 선택</button>` : ''}
+  </div>`;
+}
+
+// ── 모둠원 입력 ──
+function renderMemberInput() {
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap">
+    <button class="back-btn" onclick="go('teamSelect')">← 모둠 선택</button>
+    <h2 class="title">${S.team+1}모둠 참가자</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠원 이름을 입력해 주세요</p>
+    <div class="card">
+      ${S.members.map((m,i) => `
+        <div style="margin-bottom:${i<S.members.length-1?12:0}px">
+          <label style="font-size:12px;color:var(--sub);margin-bottom:4px;display:block">참가자 ${i+1}</label>
+          <input class="input member-input" data-idx="${i}" placeholder="이름 입력" value="${m}">
+        </div>
+      `).join('')}
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-sm" style="flex:1;background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);font-size:13px" onclick="S.members.push('');render()">+ 추가</button>
+        ${S.members.length > 1 ? `<button class="btn btn-sm" style="flex:1;background:rgba(255,80,80,0.05);border-color:rgba(255,80,80,0.15);color:rgba(255,150,150,0.6);font-size:13px" onclick="S.members.pop();render()">− 삭제</button>` : ''}
+      </div>
+    </div>
+    <button class="btn ${S.members.some(m=>m.trim())?'':'btn-off'}" style="margin-top:16px" id="start-btn">탐험 시작!</button>
+  </div>`;
+  // 입력 바인딩
+  document.querySelectorAll('.member-input').forEach(inp => {
+    inp.addEventListener('input', e => { S.members[+e.target.dataset.idx] = e.target.value; });
+  });
+  const startBtn = $('start-btn');
+  if (startBtn && S.members.some(m => m.trim())) {
+    startBtn.addEventListener('click', async () => {
+      S.stage = 0;
+      await registerTeam(S.team, S.members);
+      listenState(); // 학생도 state 리스닝 (메시지/사진)
+      listenTeams(); // 도착 현황 리스닝
+      go('quiz');
+    });
+  }
+}
+
+// ── 퀴즈 ──
+function renderQuiz() {
+  const q = QUIZZES[S.team][S.stage];
+  const isFinal = S.stage === 3;
+  const c = COLORS[S.team];
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span class="tag" style="background:${c}20;border:1px solid ${c}40;color:${c}">${S.team+1}모둠</span>
+      <div style="display:flex;gap:6px">${[0,1,2,3].map(i => `<div class="dot ${i===S.stage?'active':i<S.stage?'done':'idle'}"></div>`).join('')}</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isFinal?'🌟 마지막 문제':`문제 ${S.stage+1} / 4`}</div>
+      <h3 style="font-size:18px;font-weight:700;line-height:1.6;margin-bottom:24px">${q.question}</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${q.options.map((o,i) => `<button class="option-btn" data-idx="${i}"><span style="margin-right:8px;opacity:.35">${['A','B','C','D'][i]}</span>${o}</button>`).join('')}
+      </div>
+    </div>
+  </div>`;
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const idx = +this.dataset.idx;
+      if (idx === q.answer) {
+        this.classList.add('correct');
+        setTimeout(() => go('hint'), 1200);
+      } else {
+        this.classList.add('wrong');
+        setTimeout(() => this.classList.remove('wrong'), 800);
+      }
+    });
+  });
+}
+
+// ── 힌트 ──
+function renderHint() {
+  const q = QUIZZES[S.team][S.stage];
+  const isFinal = S.stage === 3;
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div class="card" style="text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">🗺️</div>
+      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isFinal?'최종 목적지 힌트':`${S.stage+1}번째 장소 힌트`}</div>
+      <p style="font-size:18px;line-height:1.7;margin-bottom:24px;font-weight:600;color:var(--accent)">${q.hint}</p>
+      <p style="font-size:13px;color:var(--dim);margin-bottom:24px">목적지에 도착하면 QR코드를 스캔하세요</p>
+      <button class="btn" onclick="go('scan')">📷 QR코드 스캔하기</button>
+    </div>
+  </div>`;
+}
+
+// ── QR 스캔 ──
+function renderScan() {
+  const q = QUIZZES[S.team][S.stage];
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div class="card" style="text-align:center">
+      <div style="font-size:36px;margin-bottom:12px">📷</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">QR코드 스캔</h3>
+      <p style="font-size:13px;color:var(--dim);margin-bottom:16px">목적지의 QR코드를 카메라로 비춰주세요</p>
+      <div id="qr-reader"></div>
+      <p id="qr-manual-label" style="display:none;font-size:12px;color:var(--dim);margin-bottom:8px">카메라를 사용할 수 없는 경우 코드를 직접 입력하세요</p>
+      <input id="qr-manual" class="input" style="display:none;text-align:center;margin-bottom:8px" placeholder="QR 코드 입력">
+      <button id="qr-manual-btn" class="btn btn-sm" style="display:none;margin-bottom:12px">확인</button>
+    </div>
+    <button class="back-btn" style="text-align:center;margin-top:16px" onclick="go('hint')">← 힌트 다시 보기</button>
+  </div>`;
+
+  const handleResult = (code) => {
+    if (code === q.qrId) {
+      if (S.stage === 3) {
+        markArrived(S.team);
+        S.arrived[S.team] = true;
+        go('arrived');
+      } else {
+        S.stage++;
+        updateStage(S.team, S.stage);
+        go('quiz');
+      }
+    } else {
+      go('wrong');
+    }
+  };
+
+  // 카메라 스캔 시도
+  setTimeout(() => {
+    try {
+      startQrScan(handleResult);
+    } catch(e) {
+      // 카메라 실패 → 수동 입력
+    }
+    // 3초 후에도 스캐너 안 되면 수동 입력 표시
+    setTimeout(() => {
+      const ml = $('qr-manual-label'), mi = $('qr-manual'), mb = $('qr-manual-btn');
+      if (ml) ml.style.display = 'block';
+      if (mi) mi.style.display = 'block';
+      if (mb) {
+        mb.style.display = 'block';
+        mb.addEventListener('click', () => { if (mi.value.trim()) handleResult(mi.value.trim()); });
+        mi.addEventListener('keydown', e => { if (e.key === 'Enter' && mi.value.trim()) handleResult(mi.value.trim()); });
+      }
+    }, 3000);
+  }, 100);
+}
+
+// ── 잘못된 QR ──
+function renderWrong() {
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div class="card" style="text-align:center;border-color:rgba(255,80,80,0.25)">
+      <div style="font-size:48px;margin-bottom:16px">❌</div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:12px;color:#ff8a8a">잘못된 QR코드입니다</h3>
+      <p style="font-size:15px;color:var(--sub);margin-bottom:24px;line-height:1.6">다른 QR코드를 찾아보십시오.<br>힌트를 다시 확인해보세요!</p>
+      <button class="btn" onclick="go('scan')">다시 스캔하기</button>
+      <button class="back-btn" style="text-align:center;width:100%;margin-top:12px" onclick="go('hint')">힌트 다시 보기</button>
+    </div>
+  </div>`;
+}
+
+// ── 최종 도착 & 대기 ──
+function renderArrived() {
+  const cnt = S.arrived.filter(Boolean).length;
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap center">
+    <div class="card" style="text-align:center">
+      ${!S.msgSent ? `
+        <div style="font-size:48px;margin-bottom:12px">🎉</div>
+        <h2 class="title" style="font-size:22px">${S.team+1}모둠 도착 완료!</h2>
+        <p style="font-size:14px;color:var(--sub);margin-bottom:24px">최종 목적지에 도착했습니다</p>
+        <div style="background:rgba(100,140,255,0.07);border:1px solid rgba(100,140,255,0.18);border-radius:12px;padding:24px;margin-bottom:16px">
+          <div style="margin-bottom:12px"><span style="animation:pulse 1.5s ease infinite;font-size:32px">⏳</span></div>
+          <p style="font-size:16px;font-weight:700;color:#a0c4ff;margin-bottom:8px">다른 모둠을 기다리는 중입니다</p>
+          <p style="font-size:13px;color:var(--dim);line-height:1.6">모든 모둠이 목적지에 도착할 때까지<br>현재 위치에서 대기해 주세요!</p>
+        </div>
+        <div style="font-size:13px;color:var(--dim)">현재 도착: ${cnt} / 10 모둠</div>
+      ` : `
+        <div style="font-size:20px;margin-bottom:8px">📢</div>
+        <h2 class="title" style="font-size:22px">미션이 도착했습니다!</h2>
+        <div style="background:rgba(255,200,80,0.07);border:1px solid rgba(255,200,80,0.18);border-radius:12px;padding:24px;margin:16px 0">
+          <p style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:12px;line-height:1.6">📱 옥상에 있는 선생님을 향해<br>핸드폰 라이트를 비춰주세요!</p>
+          <p style="font-size:13px;color:var(--sub)">여러분의 빛이 하나의 작품이 됩니다</p>
+        </div>
+        <div class="flash-circle ${S.flashOn?'flash-on':'flash-off'}" id="flash-btn">${S.flashOn?'💡':'🔦'}</div>
+        <p style="font-size:11px;color:var(--dim);margin-bottom:16px">${S.flashOn?'손전등 ON':'터치하여 손전등 효과'}</p>
+        ${S.photoUrl ? `
+          <div style="margin-top:12px">
+            <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 작품</h3>
+            <img src="${S.photoUrl}" alt="결과" style="width:100%;border-radius:12px;display:block">
+          </div>
+        ` : ''}
+      `}
+    </div>
+  </div>`;
+  const fb = $('flash-btn');
+  if (fb) fb.addEventListener('click', () => { S.flashOn = !S.flashOn; render(); });
+}
+
+// ── 관리자 ──
+function renderAdmin() {
+  const cnt = S.arrived.filter(Boolean).length;
+  const allOk = S.arrived.every(Boolean);
+  app().innerHTML = starFieldSVG() + `
+  <div class="wrap no-print">
+    <button class="back-btn" onclick="go('splash')">← 나가기</button>
+    <h2 class="title">🔭 관리자 모드</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">여름 대삼각형 + 백조자리 (10모둠)</p>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">별자리 완성 현황</h3>
+      ${constellationSVG(S.arrived, 360)}
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">모둠별 현황 <span style="font-size:11px">(터치 토글)</span></h3>
+      ${STARS_ADMIN.map((s,i) => {
+        const td = S.teamData['team_'+i];
+        const names = td ? td.members?.join(', ') : '';
+        return `
+        <div class="team-row" data-idx="${i}" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;${i<9?'border-bottom:1px solid rgba(255,255,255,0.04)':''}; cursor:pointer">
+          <div>
+            <span style="font-weight:700;color:${COLORS[i]}">${i+1}모둠</span>
+            <span style="font-size:11px;color:var(--dim);margin-left:6px">${s.ko} · ${s.part}</span>
+            ${names ? `<div style="font-size:11px;color:var(--dim);margin-top:2px">👤 ${names}</div>` : ''}
+          </div>
+          <span class="badge ${S.arrived[i]?'badge-on':'badge-off'}">${S.arrived[i]?'도착 ✓':'이동 중'}</span>
+        </div>`;
+      }).join('')}
+      <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--dim)">${cnt} / 10 모둠 도착</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">📢 학생에게 메시지 전송</h3>
+      ${S.msgSent ? `
+        <div style="text-align:center;padding:12px 0">
+          <div style="font-size:24px;margin-bottom:8px">✅</div>
+          <p style="font-size:14px;color:#6fdf8a">메시지가 전송되었습니다</p>
+          <p style="font-size:12px;color:var(--dim);margin-top:4px">"옥상에 있는 선생님을 향해 핸드폰 라이트를 비춰주세요"</p>
+        </div>
+      ` : `
+        <p style="font-size:13px;color:var(--dim);margin-bottom:12px;line-height:1.5">${allOk?'모든 모둠이 도착했습니다! 메시지를 전송하세요.':'모든 모둠이 도착하면 버튼이 활성화됩니다.'}</p>
+        <button class="btn btn-gold ${allOk?'':'btn-off'}" id="send-msg-btn">${allOk?'📢 라이트 비추기 메시지 전송':'⏳ 대기 중 ('+cnt+'/10)'}</button>
+      `}
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">📸 결과 사진 업로드</h3>
+      ${S.photoUrl ? `
+        <img src="${S.photoUrl}" alt="업로드됨" style="width:100%;border-radius:12px;margin-bottom:12px">
+        <p style="font-size:12px;color:#6fdf8a;text-align:center">✅ 사진이 업로드되었습니다</p>
+      ` : `
+        <input type="file" accept="image/*" id="photo-input" style="display:none">
+        <button class="btn" id="photo-btn">사진 선택</button>
+      `}
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">🏷️ QR코드 생성 / 인쇄</h3>
+      <button class="btn btn-sm" onclick="go('adminQr')">QR코드 관리 페이지</button>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">⚙️ 게임 관리</h3>
+      <button class="btn btn-sm" id="reset-btn" style="background:rgba(255,80,80,0.1);border-color:rgba(255,80,80,0.2);color:rgba(255,150,150,0.7)">🔄 게임 초기화 (모든 데이터 삭제)</button>
+    </div>
+  </div>`;
+
+  // 이벤트
+  document.querySelectorAll('.team-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const i = +row.dataset.idx;
+      S.arrived[i] = !S.arrived[i];
+      // Firestore에도 반영
+      if (db) db.collection(COLLECTION).doc('team_'+i).set({teamNumber:i, arrived:S.arrived[i]},{merge:true});
+      render();
+    });
+  });
+
+  const sendBtn = $('send-msg-btn');
+  if (sendBtn && allOk) sendBtn.addEventListener('click', () => { sendMessage(); S.msgSent = true; render(); });
+
+  const photoBtn = $('photo-btn');
+  const photoInput = $('photo-input');
+  if (photoBtn && photoInput) {
+    photoBtn.addEventListener('click', () => photoInput.click());
+    photoInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      photoBtn.textContent = '업로드 중...';
+      photoBtn.classList.add('btn-off');
+      try {
+        const url = await uploadPhoto(file);
+        if (url) { S.photoUrl = url; render(); }
+      } catch(err) {
+        // Storage 안 되면 로컬 미리보기
+        S.photoUrl = URL.createObjectURL(file);
+        render();
+      }
+    });
+  }
+
+  const resetBtn = $('reset-btn');
+  if (resetBtn) resetBtn.addEventListener('click', () => {
+    if (confirm('정말로 모든 게임 데이터를 초기화하시겠습니까?')) {
+      resetGame();
+      S.arrived = Array(10).fill(false);
+      S.msgSent = false;
+      S.photoUrl = '';
+      S.teamData = {};
+      render();
+    }
+  });
+}
+
+// ── 관리자 QR코드 ──
+function renderAdminQr() {
+  // 모든 QR코드 목록 생성
+  let qrList = [];
+  QUIZZES.forEach((teamQ, ti) => {
+    teamQ.forEach((q, si) => {
+      qrList.push({
+        code: q.qrId,
+        team: ti + 1,
+        stage: si === 3 ? '최종' : `${si+1}단계`,
+        hint: q.hint.replace(/[📚🔬🎵🎨🍽️💻🏃📺⭐]/g, '').trim()
+      });
+    });
+  });
+
+  app().innerHTML = `
+  <div class="wrap no-print">
+    <button class="back-btn" onclick="go('admin')">← 관리자 패널</button>
+    <h2 class="title">🏷️ QR코드 관리</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:16px;line-height:1.5">각 QR코드를 인쇄하여 해당 장소에 부착하세요</p>
+    <button class="btn" style="margin-bottom:24px" onclick="window.print()">🖨️ 인쇄하기</button>
+  </div>
+  <div class="qr-print-grid" style="max-width:800px;margin:0 auto;padding:0 16px 40px" id="qr-grid">
+    ${qrList.map(q => `
+      <div class="qr-item">
+        <div id="qr-${q.code}" style="margin:0 auto 8px;width:150px;height:150px"></div>
+        <p>${q.team}모둠 ${q.stage}</p>
+        <p style="font-size:14px;font-weight:800;color:#000;margin-top:4px">${q.code}</p>
+        <small>${q.hint.substring(0, 30)}...</small>
+      </div>
+    `).join('')}
+  </div>`;
+
+  // QR코드 생성 (html5-qrcode의 QR 생성은 별도 라이브러리 필요하므로 canvas로 간단 구현)
+  qrList.forEach(q => {
+    const el = document.getElementById('qr-' + q.code);
+    if (el && typeof QRCode !== 'undefined') {
+      new QRCode(el, { text: q.code, width: 150, height: 150, correctLevel: QRCode.CorrectLevel.M });
+    } else if (el) {
+      // QRCode 라이브러리 없으면 텍스트 표시
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+      el.style.border = '2px dashed #ccc';
+      el.style.borderRadius = '8px';
+      el.style.fontSize = '16px';
+      el.style.fontWeight = '800';
+      el.style.color = '#333';
+      el.textContent = q.code;
+    }
+  });
+}
+
+// ════════════════════════════════════════════════
+//  유틸
+// ════════════════════════════════════════════════
+function go(view) {
+  stopQrScan();
+  S.view = view;
+  render();
+  window.scrollTo(0, 0);
+}
+
+// ════════════════════════════════════════════════
+//  초기화
+// ════════════════════════════════════════════════
+initFirebase();
+render();
+</script>
+
+<!-- QR코드 생성 라이브러리 (인쇄용) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+</body>
+</html>
