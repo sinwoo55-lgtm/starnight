@@ -288,6 +288,44 @@ function stopQrScan() {
 }
 
 // ════════════════════════════════════════════════
+//  손전등(토치) 제어
+// ════════════════════════════════════════════════
+let torchStream = null;
+let torchTrack = null;
+
+async function torchOn() {
+  // 방법 1: 카메라 토치 API (Android Chrome 등)
+  try {
+    torchStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
+    torchTrack = torchStream.getVideoTracks()[0];
+    const caps = torchTrack.getCapabilities ? torchTrack.getCapabilities() : {};
+    if (caps.torch) {
+      await torchTrack.applyConstraints({ advanced: [{ torch: true }] });
+      console.log('토치 ON');
+      return true;
+    }
+  } catch(e) {
+    console.warn('토치 API 실패:', e);
+  }
+  // 토치 미지원 시 → 화면을 밝게 (폴백)
+  return false;
+}
+
+function torchOff() {
+  if (torchTrack) {
+    try { torchTrack.applyConstraints({ advanced: [{ torch: false }] }); } catch(e) {}
+    try { torchTrack.stop(); } catch(e) {}
+    torchTrack = null;
+  }
+  if (torchStream) {
+    torchStream.getTracks().forEach(t => t.stop());
+    torchStream = null;
+  }
+}
+
+// ════════════════════════════════════════════════
 //  별 배경 생성
 // ════════════════════════════════════════════════
 const STAR_FIELD = Array.from({length:90}, () => ({
@@ -595,7 +633,8 @@ function renderArrived() {
           <p style="font-size:13px;color:var(--sub)">여러분의 빛이 하나의 작품이 됩니다</p>
         </div>
         <div class="flash-circle ${S.flashOn?'flash-on':'flash-off'}" id="flash-btn">${S.flashOn?'💡':'🔦'}</div>
-        <p style="font-size:11px;color:var(--dim);margin-bottom:16px">${S.flashOn?'손전등 ON':'터치하여 손전등 효과'}</p>
+        <p id="flash-status" style="font-size:11px;color:var(--dim);margin-bottom:16px">${S.flashOn?'손전등 ON — 다시 터치하면 꺼집니다':'터치하여 손전등 켜기'}</p>
+        ${S.flashOn ? '<div id="bright-screen" style="position:fixed;inset:0;background:#fff;opacity:0.15;z-index:0;pointer-events:none"></div>' : ''}
         ${S.photoUrl ? `
           <div style="margin-top:12px">
             <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 작품</h3>
@@ -606,7 +645,24 @@ function renderArrived() {
     </div>
   </div>`;
   const fb = $('flash-btn');
-  if (fb) fb.addEventListener('click', () => { S.flashOn = !S.flashOn; render(); });
+  if (fb) fb.addEventListener('click', async () => {
+    if (S.flashOn) {
+      // 끄기
+      torchOff();
+      S.flashOn = false;
+      render();
+    } else {
+      // 켜기
+      const torchOk = await torchOn();
+      S.flashOn = true;
+      render();
+      if (!torchOk) {
+        // 토치 미지원 안내
+        const st = $('flash-status');
+        if (st) st.textContent = '📱 직접 손전등 앱을 켜주세요!';
+      }
+    }
+  });
 }
 
 // ── 관리자 ──
@@ -783,6 +839,7 @@ function renderAdminQr() {
 // ════════════════════════════════════════════════
 function go(view) {
   if (S.view === 'scan') stopQrScan();
+  if (S.view === 'arrived' && S.flashOn) { torchOff(); S.flashOn = false; }
   S.view = view;
   render();
   window.scrollTo(0, 0);
