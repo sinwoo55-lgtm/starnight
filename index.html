@@ -49,6 +49,11 @@ html,body{height:100%;font-family:'Noto Sans KR',sans-serif;background:var(--bg)
 .badge{padding:3px 10px;border-radius:16px;font-size:11px;border:1px solid}
 .badge-on{background:rgba(80,200,120,0.15);color:#6fdf8a;border-color:rgba(80,200,120,0.25)}
 .badge-off{background:rgba(255,255,255,0.04);color:var(--sub);border-color:rgba(255,255,255,0.06)}
+.badge-taken{background:rgba(255,80,80,0.1);color:rgba(255,130,130,0.7);border-color:rgba(255,80,80,0.2)}
+.team-btn.taken{opacity:.35;pointer-events:none;position:relative}
+.team-btn.taken::after{content:'등록됨';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,130,130,0.7)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-card{background:#1a1f30;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;max-width:340px;width:100%}
 .flash-circle{width:110px;height:110px;border-radius:50%;margin:16px auto;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:36px}
 .flash-off{background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1)}
 .flash-on{background:radial-gradient(circle,#fffbe0 0%,#ffd54f 30%,rgba(255,213,79,0.3) 60%,transparent 80%);border:2px solid rgba(255,213,79,0.6);box-shadow:0 0 50px rgba(255,213,79,0.4)}
@@ -184,10 +189,73 @@ let S = {
   flashOn: false, adminPw: '', pwError: false,
   adminTaps: 0, tapTimer: null, qrScanning: false,
   penalty: false, penaltyTimer: null, penaltyCount: 0,
-  teamData: {}
+  teamData: {},
+  registeredTeams: Array(10).fill(false) // 이미 등록된 모둠
 };
 
 let db, storage, unsubTeams, unsubState;
+
+// ════════════════════════════════════════════════
+//  세션 저장/복원 (localStorage)
+// ════════════════════════════════════════════════
+const LS_KEY = 'starnight_session';
+
+function saveSession() {
+  try {
+    const data = { team: S.team, members: S.members, stage: S.stage, ts: Date.now() };
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+
+function clearSession() {
+  try { localStorage.removeItem(LS_KEY); } catch(e) {}
+}
+
+function restoreSession() {
+  const saved = loadSession();
+  if (!saved || saved.team === null || saved.team === undefined) return false;
+  S.team = saved.team;
+  S.members = saved.members || ['','',''];
+  S.stage = saved.stage || 0;
+  // Firestore에서 해당 팀이 아직 존재하는지 확인
+  if (db) {
+    db.collection(COLLECTION).doc('team_' + S.team).get().then(doc => {
+      if (doc.exists) {
+        const d = doc.data();
+        S.stage = d.currentStage || S.stage;
+        S.members = d.members || S.members;
+        if (d.arrived) {
+          S.view = 'arrived';
+        } else {
+          S.view = 'quiz';
+        }
+        listenTeams();
+        listenState();
+        render();
+      } else {
+        // Firestore에 없음 = 관리자가 초기화함
+        clearSession();
+        S.team = null;
+        S.view = 'splash';
+        render();
+      }
+    }).catch(() => {
+      // 오프라인이면 저장된 상태로 진행
+      S.view = 'quiz';
+      render();
+    });
+    return true;
+  }
+  return false;
+}
 
 // ════════════════════════════════════════════════
 //  Firebase
@@ -258,20 +326,24 @@ async function resetGame() {
 // 실시간 리스너: 팀 상태
 function listenTeams() {
   if (!db) return;
+  if (unsubTeams) unsubTeams(); // 중복 방지
   unsubTeams = db.collection(COLLECTION)
     .where(firebase.firestore.FieldPath.documentId(), '!=', '_state')
     .onSnapshot(snap => {
       const newArrived = Array(10).fill(false);
+      const newRegistered = Array(10).fill(false);
       const teamData = {};
       snap.forEach(doc => {
         const d = doc.data();
         const idx = d.teamNumber;
         if (idx !== undefined) {
           newArrived[idx] = !!d.arrived;
+          newRegistered[idx] = true;
           teamData['team_' + idx] = d;
         }
       });
       S.arrived = newArrived;
+      S.registeredTeams = newRegistered;
       S.teamData = teamData;
       if (S.view !== 'scan') render();
     });
@@ -461,14 +533,17 @@ function renderTeamSelect() {
     <h2 class="title">모둠을 선택하세요</h2>
     <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠 번호를 선택한 뒤 탐험을 시작합니다</p>
     <div class="team-grid">
-      ${Array.from({length:10},(_,i) => `
-        <button class="team-btn ${S.team===i?'sel':''}" onclick="S.team=${i};render()" style="${S.team===i?`background:${COLORS[i]}18;border-color:${COLORS[i]}60`:''}">
+      ${Array.from({length:10},(_,i) => {
+        const taken = S.registeredTeams[i];
+        const sel = S.team === i;
+        return `
+        <button class="team-btn ${sel?'sel':''} ${taken?'taken':''}" ${taken?'disabled':''} onclick="${taken?'':'S.team='+i+';render()'}" style="${sel&&!taken?`background:${COLORS[i]}18;border-color:${COLORS[i]}60`:''}">
           <div class="team-circle" style="background:${COLORS[i]}25;border:2px solid ${COLORS[i]}50;color:${COLORS[i]}">${i+1}</div>
           <div style="font-size:14px;font-weight:700">${i+1}모둠</div>
-        </button>
-      `).join('')}
+        </button>`;
+      }).join('')}
     </div>
-    ${S.team !== null ? `<button class="btn" onclick="go('memberInput')">${S.team+1}모둠 선택</button>` : ''}
+    ${S.team !== null && !S.registeredTeams[S.team] ? `<button class="btn" onclick="go('memberInput')">${S.team+1}모둠 선택</button>` : ''}
   </div>`;
 }
 
@@ -510,6 +585,7 @@ function renderMemberInput() {
     if (!S.members.some(m => m.trim())) return;
     S.stage = 0;
     await registerTeam(S.team, S.members);
+    saveSession();
     listenState();
     listenTeams();
     go('quiz');
@@ -628,10 +704,12 @@ function renderScan() {
       if (S.stage === 2) {
         markArrived(S.team);
         S.arrived[S.team] = true;
+        saveSession();
         go('arrived');
       } else {
         S.stage++;
         updateStage(S.team, S.stage);
+        saveSession();
         go('quiz');
       }
     } else {
@@ -723,21 +801,37 @@ function renderAdmin() {
     </div>
 
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">모둠별 현황 <span style="font-size:11px">(터치 토글)</span></h3>
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">모둠별 현황</h3>
       ${STARS_ADMIN.map((s,i) => {
         const td = S.teamData['team_'+i];
-        const names = td ? td.members?.join(', ') : '';
+        const registered = S.registeredTeams[i];
+        const memberCount = td ? (td.members?.length || 0) : 0;
+        const stageInfo = td ? (td.arrived ? '도착 완료' : `${(td.currentStage||0)+1}번째 문제`) : '';
         return `
-        <div class="team-row" data-idx="${i}" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;${i<9?'border-bottom:1px solid rgba(255,255,255,0.04)':''}; cursor:pointer">
-          <div>
-            <span style="font-weight:700;color:${COLORS[i]}">${i+1}모둠</span>
-            <span style="font-size:11px;color:var(--dim);margin-left:6px">${s.ko} · ${s.part}</span>
-            ${names ? `<div style="font-size:11px;color:var(--dim);margin-top:2px">👤 ${names}</div>` : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;${i<9?'border-bottom:1px solid rgba(255,255,255,0.04)':''}">
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-weight:700;color:${COLORS[i]}">${i+1}모둠</span>
+              <span style="font-size:10px;color:var(--dim)">${s.ko}</span>
+              ${registered ? `<button class="member-popup-btn" data-idx="${i}" style="padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(100,140,255,0.1);border:1px solid rgba(100,140,255,0.2);color:#a0b8ff;cursor:pointer;font-family:inherit">👤 ${memberCount}명</button>` : ''}
+            </div>
+            ${registered ? `<div style="font-size:10px;color:var(--dim);margin-top:2px">${stageInfo}</div>` : '<div style="font-size:10px;color:var(--dim);margin-top:2px">미등록</div>'}
           </div>
-          <span class="badge ${S.arrived[i]?'badge-on':'badge-off'}">${S.arrived[i]?'도착 ✓':'이동 중'}</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="badge ${S.arrived[i]?'badge-on':registered?'badge-off':'badge-taken'}">${S.arrived[i]?'도착 ✓':registered?'진행 중':'미등록'}</span>
+            <button class="arrive-toggle" data-idx="${i}" style="padding:4px 8px;border-radius:8px;font-size:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--dim);cursor:pointer;font-family:inherit">토글</button>
+          </div>
         </div>`;
       }).join('')}
       <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--dim)">${cnt} / 10 모둠 도착</div>
+    </div>
+
+    <!-- 모둠원 팝업 -->
+    <div id="member-modal" class="modal-overlay" style="display:none">
+      <div class="modal-card">
+        <div id="modal-content"></div>
+        <button class="btn btn-sm" style="margin-top:16px" onclick="$('member-modal').style.display='none'">닫기</button>
+      </div>
     </div>
 
     <div class="card" style="margin-bottom:16px">
@@ -776,14 +870,37 @@ function renderAdmin() {
     </div>
   </div>`;
 
-  // 이벤트
-  document.querySelectorAll('.team-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const i = +row.dataset.idx;
+  // 이벤트: 도착 토글
+  document.querySelectorAll('.arrive-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.idx;
       S.arrived[i] = !S.arrived[i];
-      // Firestore에도 반영
       if (db) db.collection(COLLECTION).doc('team_'+i).set({teamNumber:i, arrived:S.arrived[i]},{merge:true});
       render();
+    });
+  });
+
+  // 이벤트: 모둠원 팝업
+  document.querySelectorAll('.member-popup-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const i = +btn.dataset.idx;
+      const td = S.teamData['team_'+i];
+      const members = td?.members || [];
+      const modal = $('member-modal');
+      const content = $('modal-content');
+      if (modal && content) {
+        content.innerHTML = `
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:${COLORS[i]}">${i+1}모둠 구성원</h3>
+          <p style="font-size:11px;color:var(--dim);margin-bottom:12px">${STARS_ADMIN[i].ko} (${STARS_ADMIN[i].en}) · ${STARS_ADMIN[i].part}</p>
+          ${members.length > 0 ? members.map((m,j) => `
+            <div style="padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;margin-bottom:6px;font-size:14px">
+              <span style="color:var(--dim);margin-right:8px">${j+1}.</span>${m}
+            </div>
+          `).join('') : '<p style="color:var(--dim);font-size:13px">등록된 구성원이 없습니다</p>'}
+        `;
+        modal.style.display = 'flex';
+      }
     });
   });
 
@@ -812,9 +929,11 @@ function renderAdmin() {
 
   const resetBtn = $('reset-btn');
   if (resetBtn) resetBtn.addEventListener('click', () => {
-    if (confirm('정말로 모든 게임 데이터를 초기화하시겠습니까?')) {
+    if (confirm('정말로 모든 게임 데이터를 초기화하시겠습니까?\n\n학생 기기의 세션은 다음 접속 시 자동으로 초기화됩니다.')) {
       resetGame();
+      clearSession();
       S.arrived = Array(10).fill(false);
+      S.registeredTeams = Array(10).fill(false);
       S.msgSent = false;
       S.photoUrl = '';
       S.teamData = {};
@@ -891,7 +1010,12 @@ function go(view) {
 //  초기화
 // ════════════════════════════════════════════════
 initFirebase();
-render();
+// 세션 복원 시도 → 실패하면 스플래시
+if (!restoreSession()) {
+  // 모둠 선택 화면에서도 등록 현황 확인 필요
+  listenTeams();
+  render();
+}
 </script>
 
 <!-- QR코드 생성 라이브러리 (인쇄용) -->
