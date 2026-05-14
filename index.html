@@ -113,75 +113,65 @@ const CYGNUS_LINES = [[0,1],[1,2],[2,3],[1,4],[4,5],[1,6],[6,7]];
 const TRI_LINES = [[0,8],[0,9],[8,9]];
 
 const QUIZZES = [
-  // ── 1모둠: 과학01(대삼각형) + 과학17(블랙홀) + 국어01(별헤는밤) + 넌센스(추후) ──
+  // ── 1모둠: 과학01(대삼각형) + 과학17(블랙홀) + 국어01(별헤는밤) ──
   [
     {question:"여름철 대삼각형을 이루는 세 별이 아닌 것은?",options:["베가","데네브","알타이르","시리우스"],answer:3,hint:"📚 다음 장소: 이야기가 잠든 곳, 책 사이에 숨겨진 비밀을 찾아라!",qrId:"T01S1"},
     {question:"블랙홀의 경계면, 빛도 탈출할 수 없는 지점을 무엇이라 하나요?",options:["코로나","사건의 지평선","광구","성운"],answer:1,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T01S2"},
-    {question:"윤동주의 '별 헤는 밤'에서 시인이 별 하나에 담은 것이 아닌 것은?",options:["추억","사랑","복수","동경"],answer:2,hint:"🎵 다음 장소: 음표가 춤추는 공간으로 가라!",qrId:"T01S3"},
-    {question:"[넌센스 추후 교체] 세상에서 가장 큰 코는?",options:["코끼리 코","피노키오 코","멕시코","코뿔소 코"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T01F"},
+    {question:"윤동주의 '별 헤는 밤'에서 시인이 별 하나에 담은 것이 아닌 것은?",options:["추억","사랑","복수","동경"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T01F"},
   ],
-  // ── 2모둠: 과학02(데네브) + 과학11(광년) + 국어02(서시) + 넌센스(추후) ──
+  // ── 2모둠: 과학02(데네브) + 과학11(광년) + 국어02(서시) ──
   [
     {question:"백조자리의 꼬리에 위치한 1등성의 이름은?",options:["알비레오","데네브","사드르","베가"],answer:1,hint:"🎨 다음 장소: 색과 형태의 공간으로 가라!",qrId:"T02S1"},
     {question:"1광년은 빛이 얼마 동안 이동하는 거리일까요?",options:["1일","1달","1년","100년"],answer:2,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T02S2"},
-    {question:"윤동주의 '서시'에 나오는 유명한 첫 구절은?",options:["나 보기가 역겨워 가실 때에는","죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를","나는 나룻배 당신은 행인","모란이 피기까지는"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문이 있는 곳!",qrId:"T02S3"},
-    {question:"[넌센스 추후 교체] 비가 오면 올수록 건조해지는 것은?",options:["사막","에어컨","우산","빨래"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T02F"},
+    {question:"윤동주의 '서시'에 나오는 유명한 첫 구절은?",options:["나 보기가 역겨워 가실 때에는","죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를","나는 나룻배 당신은 행인","모란이 피기까지는"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T02F"},
   ],
-  // ── 3모둠: 과학04(북십자성) + 과학14(프록시마) + 국어03(출생지) + 넌센스(추후) ──
+  // ── 3모둠: 과학04(북십자성) + 과학21(은하수 영어) + 국어03(출생지) ──
   [
     {question:"백조자리는 십자가 모양 때문에 다른 이름으로도 불립니다. 그 이름은?",options:["남십자성","북십자성","동십자성","서십자성"],answer:1,hint:"🏃 다음 장소: 땀과 열정의 넓은 실내 공간으로!",qrId:"T03S1"},
-    {question:"태양 다음으로 지구에서 가장 가까운 항성은?",options:["시리우스","베텔게우스","프록시마 센타우리","폴라리스"],answer:2,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T03S2"},
-    {question:"윤동주가 태어난 곳은?",options:["서울","평양","만주 명동촌(북간도)","부산"],answer:2,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T03S3"},
-    {question:"[넌센스 추후 교체] 소가 우주에 가면?",options:["소행성","우(牛)주","소혹성","밀키웨이"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T03F"},
+    {question:"은하수를 영어로 무엇이라 할까요?",options:["Star Way","Milky Way","Galaxy Road","Sky River"],answer:1,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T03S2"},
+    {question:"윤동주가 태어난 곳은?",options:["서울","평양","만주 명동촌(북간도)","부산"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T03F"},
   ],
-  // ── 4모둠: 과학05(알타이르/독수리) + 과학36(별 반짝임) + 국어05(시집제목) + 넌센스(추후) ──
+  // ── 4모둠: 과학05(알타이르/독수리) + 과학36(별 반짝임) + 국어05(시집제목) ──
   [
     {question:"견우와 직녀 설화에서 견우성(알타이르)이 속한 별자리는?",options:["백조자리","거문고자리","독수리자리","사자자리"],answer:2,hint:"🎵 다음 장소: 음표가 춤추는 공간으로!",qrId:"T04S1"},
     {question:"밤하늘에서 별이 반짝이는 이유는?",options:["별이 실제로 깜빡여서","지구 대기의 굴절 때문에","구름이 가려서","지구가 회전해서"],answer:1,hint:"🎨 다음 장소: 색과 형태의 공간으로!",qrId:"T04S2"},
-    {question:"윤동주의 유고 시집 제목은?",options:["하늘과 바람과 별과 시","진달래꽃","님의 침묵","별 헤는 밤"],answer:0,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T04S3"},
-    {question:"[넌센스 추후 교체] 별이 아플 때 가는 곳은?",options:["별원","스타벅스","별(★)의원","우주정거장"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T04F"},
+    {question:"윤동주의 유고 시집 제목은?",options:["하늘과 바람과 별과 시","진달래꽃","님의 침묵","별 헤는 밤"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T04F"},
   ],
-  // ── 5모둠: 과학06(베가/거문고) + 과학35(초신성) + 국어08(자화상) + 넌센스(추후) ──
+  // ── 5모둠: 과학06(베가/거문고) + 과학35(초신성) + 국어08(자화상) ──
   [
     {question:"베가(직녀성)가 속한 별자리는?",options:["독수리자리","거문고자리","백조자리","물병자리"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문으로!",qrId:"T05S1"},
     {question:"별이 일생을 마치고 폭발하는 현상을 무엇이라 할까요?",options:["유성우","초신성(슈퍼노바)","오로라","일식"],answer:1,hint:"🏃 다음 장소: 땀과 열정의 넓은 실내 공간으로!",qrId:"T05S2"},
-    {question:"윤동주의 시 '자화상'에서 시인이 자신을 바라보는 곳은?",options:["거울","우물","호수","강"],answer:1,hint:"📺 다음 장소: 큰 화면이 있는 어두운 공간으로!",qrId:"T05S3"},
-    {question:"[넌센스 추후 교체] 별이 운동을 하면?",options:["별건 아니야","스타(star)트","반짝 달리기","은하 마라톤"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T05F"},
+    {question:"윤동주의 시 '자화상'에서 시인이 자신을 바라보는 곳은?",options:["거울","우물","호수","강"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T05F"},
   ],
-  // ── 6모둠: 과학15(파란별 온도) + 과학19(88개) + 국어09(서시 빈칸) + 넌센스(추후) ──
+  // ── 6모둠: 과학15(파란별 온도) + 과학19(88개) + 국어09(서시 빈칸) ──
   [
     {question:"별의 색깔이 파란색이면 표면 온도는?",options:["매우 낮다","보통이다","매우 높다","온도와 무관하다"],answer:2,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T06S1"},
     {question:"국제천문연맹(IAU)이 공인한 별자리의 총 개수는?",options:["48개","66개","88개","108개"],answer:2,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T06S2"},
-    {question:"'서시'에서 \"잎새에 이는 바람에도 나는 ○○했다\"의 빈칸은?",options:["슬퍼","괴로워","아파","외로워"],answer:1,hint:"🎵 다음 장소: 음표가 춤추는 공간으로!",qrId:"T06S3"},
-    {question:"[넌센스 추후 교체] 로켓이 화가 나면?",options:["폭발(발사)한다","울음소리 낸다","착륙한다","멈춘다"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T06F"},
+    {question:"'서시'에서 \"잎새에 이는 바람에도 나는 (          )했다\"의 빈칸은?",options:["슬퍼","괴로워","아파","외로워"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T06F"},
   ],
-  // ── 7모둠: 과학16(붉은별 온도) + 과학39(북두칠성) + 국어13(서시 사랑) + 넌센스(추후) ──
+  // ── 7모둠: 과학16(붉은별 온도) + 과학39(북두칠성) + 국어13(서시 사랑) ──
   [
     {question:"별의 색깔이 붉은색이면 표면 온도는?",options:["비교적 낮다","보통이다","매우 높다","온도와 무관하다"],answer:0,hint:"🎨 다음 장소: 색과 형태의 공간으로!",qrId:"T07S1"},
     {question:"북두칠성이 속한 별자리는?",options:["큰곰자리","작은곰자리","백조자리","카시오페이아"],answer:0,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T07S2"},
-    {question:"'서시'에서 시인이 '모든 죽어가는 것을' 어떻게 하겠다고 했나요?",options:["기억하겠다","사랑하겠다","노래하겠다","잊지 않겠다"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문으로!",qrId:"T07S3"},
-    {question:"[넌센스 추후 교체] 달에서 사는 동물은?",options:["달팽이","토끼","달(月)마시안","도마뱀"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T07F"},
+    {question:"'서시'에서 시인이 '모든 죽어가는 것을' 어떻게 하겠다고 했나요?",options:["기억하겠다","사랑하겠다","노래하겠다","잊지 않겠다"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T07F"},
   ],
-  // ── 8모둠: 과학20(북극성) + 과학24(은하 지름) + 국어14(후쿠오카) + 넌센스(추후) ──
+  // ── 8모둠: 과학20(북극성) + 과학24(은하 지름) + 국어14(후쿠오카) ──
   [
     {question:"밤하늘에서 방향을 찾을 때 기준이 되는 별은?",options:["데네브","북극성","아르크투루스","스피카"],answer:1,hint:"📺 다음 장소: 큰 화면이 있는 어두운 공간으로!",qrId:"T08S1"},
     {question:"우리 은하의 지름은 약 얼마일까요?",options:["1천 광년","1만 광년","10만 광년","100만 광년"],answer:2,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T08S2"},
-    {question:"윤동주가 옥중에서 사망한 장소는?",options:["서대문형무소","후쿠오카 형무소","교토 유치장","나가사키 형무소"],answer:1,hint:"🏃 다음 장소: 땀과 열정의 넓은 실내 공간으로!",qrId:"T08S3"},
-    {question:"[넌센스 추후 교체] 고양이가 우주에 가면?",options:["캣행성","미우주","냥(냥)성","고양이자리"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T08F"},
+    {question:"윤동주가 옥중에서 사망한 장소는?",options:["서대문형무소","후쿠오카 형무소","교토 유치장","나가사키 형무소"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T08F"},
   ],
-  // ── 9모둠: 과학22(은하수/백조) + 과학33(태양 온도) + 국어17(부끄러움) + 넌센스(추후) ──
+  // ── 9모둠: 과학22(은하수/백조) + 과학33(태양 온도) + 국어17(부끄러움) ──
   [
     {question:"여름 밤하늘의 은하수를 가로지르는 별자리는?",options:["오리온자리","백조자리","사자자리","물고기자리"],answer:1,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T09S1"},
     {question:"태양의 표면 온도는 약 몇 도일까요?",options:["1,000℃","약 5,500℃","10만℃","100만℃"],answer:1,hint:"🎵 다음 장소: 음표가 춤추는 공간으로!",qrId:"T09S2"},
-    {question:"윤동주의 시에 공통적으로 나타나는 정서는?",options:["분노와 저항","부끄러움과 성찰","즐거움과 유희","풍자와 해학"],answer:1,hint:"🎨 다음 장소: 색과 형태의 공간으로!",qrId:"T09S3"},
-    {question:"[넌센스 추후 교체] 세상에서 가장 긴 노래는?",options:["해(sun)장국","대장금","롱송","마라톤송"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T09F"},
+    {question:"윤동주의 시에 공통적으로 나타나는 정서는?",options:["분노와 저항","부끄러움과 성찰","즐거움과 유희","풍자와 해학"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T09F"},
   ],
-  // ── 10모둠: 과학34(빛 8분) + 과학40(유성) + 국어19(정지용 출판) + 넌센스(추후) ──
+  // ── 10모둠: 과학34(빛 8분) + 과학40(유성) + 국어19(정지용 출판) ──
   [
     {question:"빛이 태양에서 지구까지 오는 데 걸리는 시간은?",options:["1초","1분","약 8분","1시간"],answer:2,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T10S1"},
     {question:"별똥별(유성)이 빛나는 이유는?",options:["별이 떨어져서","우주 먼지가 대기와 마찰하여 타면서","번개와 같은 원리","달빛을 반사해서"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문으로!",qrId:"T10S2"},
-    {question:"윤동주의 시집 '하늘과 바람과 별과 시'를 출판한 사람은?",options:["정지용","이광수","김소월","한용운"],answer:0,hint:"📺 다음 장소: 큰 화면이 있는 어두운 공간으로!",qrId:"T10S3"},
-    {question:"[넌센스 추후 교체] 우주에서 가장 깨끗한 곳은?",options:["진공","세탁(洗宅)성","명왕성","화장실"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T10F"},
+    {question:"윤동주의 시집 '하늘과 바람과 별과 시'를 출판한 사람은?",options:["정지용","이광수","김소월","한용운"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T10F"},
   ],
 ];
 
@@ -351,42 +341,10 @@ function stopQrScan() {
 }
 
 // ════════════════════════════════════════════════
-//  손전등(토치) 제어
+//  손전등 효과 (화면 밝게)
 // ════════════════════════════════════════════════
-let torchStream = null;
-let torchTrack = null;
-
-async function torchOn() {
-  // 방법 1: 카메라 토치 API (Android Chrome 등)
-  try {
-    torchStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
-    });
-    torchTrack = torchStream.getVideoTracks()[0];
-    const caps = torchTrack.getCapabilities ? torchTrack.getCapabilities() : {};
-    if (caps.torch) {
-      await torchTrack.applyConstraints({ advanced: [{ torch: true }] });
-      console.log('토치 ON');
-      return true;
-    }
-  } catch(e) {
-    console.warn('토치 API 실패:', e);
-  }
-  // 토치 미지원 시 → 화면을 밝게 (폴백)
-  return false;
-}
-
-function torchOff() {
-  if (torchTrack) {
-    try { torchTrack.applyConstraints({ advanced: [{ torch: false }] }); } catch(e) {}
-    try { torchTrack.stop(); } catch(e) {}
-    torchTrack = null;
-  }
-  if (torchStream) {
-    torchStream.getTracks().forEach(t => t.stop());
-    torchStream = null;
-  }
-}
+function torchOn() {}
+function torchOff() {}
 
 // ════════════════════════════════════════════════
 //  별 배경 생성
@@ -568,16 +526,16 @@ function clearPenalty() {
 function renderQuiz() {
   clearPenalty();
   const q = QUIZZES[S.team][S.stage];
-  const isFinal = S.stage === 3;
+  const isFinal = S.stage === 2;
   const c = COLORS[S.team];
   app().innerHTML = starFieldSVG() + `
   <div class="wrap">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
       <span class="tag" style="background:${c}20;border:1px solid ${c}40;color:${c}">${S.team+1}모둠</span>
-      <div style="display:flex;gap:6px">${[0,1,2,3].map(i => `<div class="dot ${i===S.stage?'active':i<S.stage?'done':'idle'}"></div>`).join('')}</div>
+      <div style="display:flex;gap:6px">${[0,1,2].map(i => `<div class="dot ${i===S.stage?'active':i<S.stage?'done':'idle'}"></div>`).join('')}</div>
     </div>
     <div class="card">
-      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isFinal?'🌟 마지막 문제':`문제 ${S.stage+1} / 4`}</div>
+      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isFinal?'🌟 마지막 문제':`문제 ${S.stage+1} / 3`}</div>
       <h3 style="font-size:18px;font-weight:700;line-height:1.6;margin-bottom:24px">${q.question}</h3>
       <div id="options-area" style="display:flex;flex-direction:column;gap:10px">
         ${q.options.map((o,i) => `<button class="option-btn" data-idx="${i}"><span style="margin-right:8px;opacity:.35">${['A','B','C','D'][i]}</span>${o}</button>`).join('')}
@@ -633,7 +591,7 @@ function renderQuiz() {
 // ── 힌트 ──
 function renderHint() {
   const q = QUIZZES[S.team][S.stage];
-  const isFinal = S.stage === 3;
+  const isFinal = S.stage === 2;
   app().innerHTML = starFieldSVG() + `
   <div class="wrap center">
     <div class="card" style="text-align:center">
@@ -667,7 +625,7 @@ function renderScan() {
 
   const handleResult = (code) => {
     if (code === q.qrId) {
-      if (S.stage === 3) {
+      if (S.stage === 2) {
         markArrived(S.team);
         S.arrived[S.team] = true;
         go('arrived');
@@ -731,12 +689,13 @@ function renderArrived() {
         <div style="font-size:20px;margin-bottom:8px">📢</div>
         <h2 class="title" style="font-size:22px">미션이 도착했습니다!</h2>
         <div style="background:rgba(255,200,80,0.07);border:1px solid rgba(255,200,80,0.18);border-radius:12px;padding:24px;margin:16px 0">
-          <p style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:12px;line-height:1.6">📱 옥상에 있는 선생님을 향해<br>핸드폰 라이트를 비춰주세요!</p>
-          <p style="font-size:13px;color:var(--sub)">여러분의 빛이 하나의 작품이 됩니다</p>
+          <p style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:16px;line-height:1.6">📱 모둠원 전원!<br>핸드폰 손전등을 켜고<br>옥상을 향해 비춰주세요!</p>
+          <p style="font-size:13px;color:var(--sub);line-height:1.6">모둠장은 이 화면을 유지하고,<br>나머지 모둠원은 손전등을 켜주세요</p>
         </div>
-        <div class="flash-circle ${S.flashOn?'flash-on':'flash-off'}" id="flash-btn">${S.flashOn?'💡':'🔦'}</div>
-        <p id="flash-status" style="font-size:11px;color:var(--dim);margin-bottom:16px">${S.flashOn?'손전등 ON — 다시 터치하면 꺼집니다':'터치하여 손전등 켜기'}</p>
-        ${S.flashOn ? '<div id="bright-screen" style="position:fixed;inset:0;background:#fff;opacity:0.15;z-index:0;pointer-events:none"></div>' : ''}
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:16px;margin-bottom:16px">
+          <p style="font-size:13px;color:var(--sub);margin-bottom:6px">💡 손전등 켜는 방법</p>
+          <p style="font-size:12px;color:var(--dim);line-height:1.6">아이폰: 화면 우측 상단에서 아래로 스와이프 → 🔦<br>안드로이드: 화면 상단에서 아래로 스와이프 → 🔦</p>
+        </div>
         ${S.photoUrl ? `
           <div style="margin-top:12px">
             <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 작품</h3>
@@ -746,25 +705,6 @@ function renderArrived() {
       `}
     </div>
   </div>`;
-  const fb = $('flash-btn');
-  if (fb) fb.addEventListener('click', async () => {
-    if (S.flashOn) {
-      // 끄기
-      torchOff();
-      S.flashOn = false;
-      render();
-    } else {
-      // 켜기
-      const torchOk = await torchOn();
-      S.flashOn = true;
-      render();
-      if (!torchOk) {
-        // 토치 미지원 안내
-        const st = $('flash-status');
-        if (st) st.textContent = '📱 직접 손전등 앱을 켜주세요!';
-      }
-    }
-  });
 }
 
 // ── 관리자 ──
@@ -941,7 +881,6 @@ function renderAdminQr() {
 // ════════════════════════════════════════════════
 function go(view) {
   if (S.view === 'scan') stopQrScan();
-  if (S.view === 'arrived' && S.flashOn) { torchOff(); S.flashOn = false; }
   if (S.view === 'quiz') clearPenalty();
   S.view = view;
   render();
