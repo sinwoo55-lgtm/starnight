@@ -327,16 +327,15 @@ async function resetGame() {
 function listenTeams() {
   if (!db) return;
   if (unsubTeams) unsubTeams(); // 중복 방지
-  unsubTeams = db.collection(COLLECTION)
-    .where(firebase.firestore.FieldPath.documentId(), '!=', '_state')
-    .onSnapshot(snap => {
+  unsubTeams = db.collection(COLLECTION).onSnapshot(snap => {
       const newArrived = Array(10).fill(false);
       const newRegistered = Array(10).fill(false);
       const teamData = {};
       snap.forEach(doc => {
+        if (doc.id === '_state') return; // 상태 문서 제외
         const d = doc.data();
         const idx = d.teamNumber;
-        if (idx !== undefined) {
+        if (idx !== undefined && idx >= 0 && idx < 10) {
           newArrived[idx] = !!d.arrived;
           newRegistered[idx] = true;
           teamData['team_' + idx] = d;
@@ -543,8 +542,25 @@ function renderTeamSelect() {
         </button>`;
       }).join('')}
     </div>
-    ${S.team !== null && !S.registeredTeams[S.team] ? `<button class="btn" onclick="go('memberInput')">${S.team+1}모둠 선택</button>` : ''}
+    ${S.team !== null && !S.registeredTeams[S.team] ? `<button class="btn" id="team-proceed-btn">${S.team+1}모둠 선택</button>` : ''}
   </div>`;
+  const proceedBtn = $('team-proceed-btn');
+  if (proceedBtn) {
+    proceedBtn.addEventListener('click', async () => {
+      // Firestore에서 한 번 더 확인 (다른 기기가 방금 등록했을 수 있음)
+      if (db) {
+        const doc = await db.collection(COLLECTION).doc('team_' + S.team).get();
+        if (doc.exists && doc.data().members) {
+          alert('이미 다른 모둠이 선택한 번호입니다. 다른 모둠을 선택해주세요.');
+          S.registeredTeams[S.team] = true;
+          S.team = null;
+          render();
+          return;
+        }
+      }
+      go('memberInput');
+    });
+  }
 }
 
 // ── 모둠원 입력 ──
