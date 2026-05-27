@@ -118,79 +118,100 @@ const CYGNUS_LINES = [[0,1],[1,2],[2,3],[1,4],[4,5],[1,6],[6,7]];
 const TRI_LINES = [[0,8],[0,9],[8,9]];
 
 const QUIZZES = [
-  // ── 1모둠: 과학01(대삼각형) + 과학17(블랙홀) + 국어01(별헤는밤) ──
+  // ── 1팀: 위클래스 → 보건실 → 선생님 ──
   [
-    {question:"여름철 대삼각형을 이루는 세 별이 아닌 것은?",options:["베가","데네브","알타이르","시리우스"],answer:3,hint:"📚 다음 장소: 이야기가 잠든 곳, 책 사이에 숨겨진 비밀을 찾아라!",qrId:"T01S1"},
-    {question:"블랙홀의 경계면, 빛도 탈출할 수 없는 지점을 무엇이라 하나요?",options:["코로나","사건의 지평선","광구","성운"],answer:1,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T01S2"},
-    {question:"윤동주의 '별 헤는 밤'에서 시인이 별 하나에 담은 것이 아닌 것은?",options:["추억","사랑","복수","동경"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T01F"},
+    {question:"여름철 대삼각형을 이루는 세 별이 아닌 것은?",options:["베가","데네브","알타이르","시리우스"],answer:3,hint:"마음이 쉬어가는 곳, 고민거리를 나누는 따뜻한 공간으로 가라!",qrId:"T01S1"},
+    {question:"블랙홀의 경계면, 빛도 탈출할 수 없는 지점을 무엇이라 하나요?",options:["코로나","사건의 지평선","광구","성운"],answer:1,hint:"몸이 아프면 달려가는 곳, 학교의 작은 병원을 찾아라!",qrId:"T01S2"},
+    {question:"윤동주의 '별 헤는 밤'에서 시인이 별 하나에 담은 것이 아닌 것은?",options:["추억","사랑","복수","동경"],answer:2,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T01F"},
   ],
-  // ── 2모둠: 과학02(데네브) + 과학11(광년) + 국어02(서시) ──
+  // ── 2팀: 교무실 → 멀티실 → 선생님 ──
   [
-    {question:"백조자리의 꼬리에 위치한 1등성의 이름은?",options:["알비레오","데네브","사드르","베가"],answer:1,hint:"🎨 다음 장소: 색과 형태의 공간으로 가라!",qrId:"T02S1"},
-    {question:"1광년은 빛이 얼마 동안 이동하는 거리일까요?",options:["1일","1달","1년","100년"],answer:2,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T02S2"},
-    {question:"윤동주의 '서시'에 나오는 유명한 첫 구절은?",options:["나 보기가 역겨워 가실 때에는","죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를","나는 나룻배 당신은 행인","모란이 피기까지는"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T02F"},
+    {question:"백조자리의 꼬리에 위치한 1등성의 이름은?",options:["알비레오","데네브","사드르","베가"],answer:1,hint:"선생님들이 모여 계신 곳, 선생님들의 아지트로 가라!",qrId:"T02S1"},
+    {question:"1광년은 빛이 얼마 동안 이동하는 거리일까요?",options:["1일","1달","1년","100년"],answer:2,hint:"모니터로 가득 찬 곳, 학생들의 손가락이 춤을 추는 공간을 찾아라!",qrId:"T02S2"},
+    {question:"윤동주의 '서시'에 나오는 유명한 첫 구절은?",options:["나 보기가 역겨워 가실 때에는","죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를","나는 나룻배 당신은 행인","모란이 피기까지는"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T02F"},
   ],
-  // ── 3모둠: 과학04(북십자성) + 과학21(은하수 영어) + 국어03(출생지) ──
+  // ── 3팀: 음악실 → 급식실 → 선생님 ──
   [
-    {question:"백조자리는 십자가 모양 때문에 다른 이름으로도 불립니다. 그 이름은?",options:["남십자성","북십자성","동십자성","서십자성"],answer:1,hint:"🏃 다음 장소: 땀과 열정의 넓은 실내 공간으로!",qrId:"T03S1"},
-    {question:"은하수를 영어로 무엇이라 할까요?",options:["Star Way","Milky Way","Galaxy Road","Sky River"],answer:1,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T03S2"},
-    {question:"윤동주가 태어난 곳은?",options:["서울","평양","만주 명동촌(북간도)","부산"],answer:2,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T03F"},
+    {question:"백조자리는 십자가 모양 때문에 다른 이름으로도 불립니다. 그 이름은?",options:["남십자성","북십자성","동십자성","서십자성"],answer:1,hint:"선율이 울려 퍼지는, 음표가 춤추는 방으로 가라!",qrId:"T03S1"},
+    {question:"은하수를 영어로 무엇이라 할까요?",options:["Star Way","Milky Way","Galaxy Road","Sky River"],answer:1,hint:"하루의 에너지를 충전하는 곳, 배꼽시계가 울리는 장소를 찾아라!",qrId:"T03S2"},
+    {question:"윤동주가 태어난 곳은?",options:["서울","평양","만주 명동촌(북간도)","부산"],answer:2,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T03F"},
   ],
-  // ── 4모둠: 과학05(알타이르/독수리) + 과학36(별 반짝임) + 국어05(시집제목) ──
+  // ── 4팀: 드림관 → 빛샘관 입구 → 선생님 ──
   [
-    {question:"견우와 직녀 설화에서 견우성(알타이르)이 속한 별자리는?",options:["백조자리","거문고자리","독수리자리","사자자리"],answer:2,hint:"🎵 다음 장소: 음표가 춤추는 공간으로!",qrId:"T04S1"},
-    {question:"밤하늘에서 별이 반짝이는 이유는?",options:["별이 실제로 깜빡여서","지구 대기의 굴절 때문에","구름이 가려서","지구가 회전해서"],answer:1,hint:"🎨 다음 장소: 색과 형태의 공간으로!",qrId:"T04S2"},
-    {question:"윤동주의 유고 시집 제목은?",options:["하늘과 바람과 별과 시","진달래꽃","님의 침묵","별 헤는 밤"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T04F"},
+    {question:"견우와 직녀 설화에서 견우성(알타이르)이 속한 별자리는?",options:["백조자리","거문고자리","독수리자리","사자자리"],answer:2,hint:"땀방울이 만들어 내는 드라마가 펼쳐지는 곳으로 가라!",qrId:"T04S1"},
+    {question:"밤하늘에서 별이 반짝이는 이유는?",options:["별이 실제로 깜빡여서","지구 대기의 굴절 때문에","구름이 가려서","지구가 회전해서"],answer:1,hint:"이름 속에 빛을 품은 건물의 입구를 찾아라!",qrId:"T04S2"},
+    {question:"윤동주의 유고 시집 제목은?",options:["하늘과 바람과 별과 시","진달래꽃","님의 침묵","별 헤는 밤"],answer:0,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T04F"},
   ],
-  // ── 5모둠: 과학06(베가/거문고) + 과학35(초신성) + 국어08(자화상) ──
+  // ── 5팀: 기숙사 입구 → 교장실 → 선생님 ──
   [
-    {question:"베가(직녀성)가 속한 별자리는?",options:["독수리자리","거문고자리","백조자리","물병자리"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문으로!",qrId:"T05S1"},
-    {question:"별이 일생을 마치고 폭발하는 현상을 무엇이라 할까요?",options:["유성우","초신성(슈퍼노바)","오로라","일식"],answer:1,hint:"🏃 다음 장소: 땀과 열정의 넓은 실내 공간으로!",qrId:"T05S2"},
-    {question:"윤동주의 시 '자화상'에서 시인이 자신을 바라보는 곳은?",options:["거울","우물","호수","강"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T05F"},
+    {question:"베가(직녀성)가 속한 별자리는?",options:["독수리자리","거문고자리","백조자리","물병자리"],answer:1,hint:"등교 거리 0m인 친구들의 집 입구를 찾아라!",qrId:"T05S1"},
+    {question:"별이 일생을 마치고 폭발하는 현상을 무엇이라 할까요?",options:["유성우","초신성(슈퍼노바)","오로라","일식"],answer:1,hint:"학교의 최고 결정권자가 계신 곳을 찾아라!",qrId:"T05S2"},
+    {question:"윤동주의 시 '자화상'에서 시인이 자신을 바라보는 곳은?",options:["거울","우물","호수","강"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T05F"},
   ],
-  // ── 6모둠: 과학15(파란별 온도) + 과학19(88개) + 국어09(서시 빈칸) ──
+  // ── 6팀: 방송실 → 예체능실 → 선생님 ──
   [
-    {question:"별의 색깔이 파란색이면 표면 온도는?",options:["매우 낮다","보통이다","매우 높다","온도와 무관하다"],answer:2,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T06S1"},
-    {question:"국제천문연맹(IAU)이 공인한 별자리의 총 개수는?",options:["48개","66개","88개","108개"],answer:2,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T06S2"},
-    {question:"'서시'에서 \"잎새에 이는 바람에도 나는 (          )했다\"의 빈칸은?",options:["슬퍼","괴로워","아파","외로워"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T06F"},
+    {question:"별의 색깔이 파란색이면 표면 온도는?",options:["매우 낮다","보통이다","매우 높다","온도와 무관하다"],answer:2,hint:"ON AIR, 학교의 모든 소식이 시작되는 곳으로 가라!",qrId:"T06S1"},
+    {question:"국제천문연맹(IAU)이 공인한 별자리의 총 개수는?",options:["48개","66개","88개","108개"],answer:2,hint:"체육, 음악, 미술이 어우러지는 곳을 찾아라!",qrId:"T06S2"},
+    {question:"'서시'에서 \"잎새에 이는 바람에도 나는 (          )했다\"의 빈칸은?",options:["슬퍼","괴로워","아파","외로워"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T06F"},
   ],
-  // ── 7모둠: 과학16(붉은별 온도) + 과학39(북두칠성) + 국어13(서시 사랑) ──
+  // ── 7팀: 행정실 → 미술실 → 선생님 ──
   [
-    {question:"별의 색깔이 붉은색이면 표면 온도는?",options:["비교적 낮다","보통이다","매우 높다","온도와 무관하다"],answer:0,hint:"🎨 다음 장소: 색과 형태의 공간으로!",qrId:"T07S1"},
-    {question:"북두칠성이 속한 별자리는?",options:["큰곰자리","작은곰자리","백조자리","카시오페이아"],answer:0,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T07S2"},
-    {question:"'서시'에서 시인이 '모든 죽어가는 것을' 어떻게 하겠다고 했나요?",options:["기억하겠다","사랑하겠다","노래하겠다","잊지 않겠다"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T07F"},
+    {question:"별의 색깔이 붉은색이면 표면 온도는?",options:["비교적 낮다","보통이다","매우 높다","온도와 무관하다"],answer:0,hint:"서류와 도장이 가득한, 각종 증명서가 태어나는 곳을 찾아라!",qrId:"T07S1"},
+    {question:"북두칠성이 속한 별자리는?",options:["큰곰자리","작은곰자리","백조자리","카시오페이아"],answer:0,hint:"색과 형태로 세상을 표현하는 곳으로 가라!",qrId:"T07S2"},
+    {question:"'서시'에서 시인이 '모든 죽어가는 것을' 어떻게 하겠다고 했나요?",options:["기억하겠다","사랑하겠다","노래하겠다","잊지 않겠다"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T07F"},
   ],
-  // ── 8모둠: 과학20(북극성) + 과학24(은하 지름) + 국어14(후쿠오카) ──
+  // ── 8팀: 가사실 → 유도관 → 선생님 ──
   [
-    {question:"밤하늘에서 방향을 찾을 때 기준이 되는 별은?",options:["데네브","북극성","아르크투루스","스피카"],answer:1,hint:"📺 다음 장소: 큰 화면이 있는 어두운 공간으로!",qrId:"T08S1"},
-    {question:"우리 은하의 지름은 약 얼마일까요?",options:["1천 광년","1만 광년","10만 광년","100만 광년"],answer:2,hint:"📚 다음 장소: 이야기가 잠든 곳으로!",qrId:"T08S2"},
-    {question:"윤동주가 옥중에서 사망한 장소는?",options:["서대문형무소","후쿠오카 형무소","교토 유치장","나가사키 형무소"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T08F"},
+    {question:"밤하늘에서 방향을 찾을 때 기준이 되는 별은?",options:["데네브","북극성","아르크투루스","스피카"],answer:1,hint:"프라이팬과 오븐이 사는 곳, 맛있는 냄새의 근원지를 찾아라!",qrId:"T08S1"},
+    {question:"우리 은하의 지름은 약 얼마일까요?",options:["1천 광년","1만 광년","10만 광년","100만 광년"],answer:2,hint:"한판 승부의 공간, 유단자들의 수련장으로 가라!",qrId:"T08S2"},
+    {question:"윤동주가 옥중에서 사망한 장소는?",options:["서대문형무소","후쿠오카 형무소","교토 유치장","나가사키 형무소"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T08F"},
   ],
-  // ── 9모둠: 과학22(은하수/백조) + 과학33(태양 온도) + 국어17(부끄러움) ──
+  // ── 9팀: 헬스장 → 풋살장 → 선생님 ──
   [
-    {question:"여름 밤하늘의 은하수를 가로지르는 별자리는?",options:["오리온자리","백조자리","사자자리","물고기자리"],answer:1,hint:"🔬 다음 장소: 실험과 탐구의 공간에서 QR을 찾아라!",qrId:"T09S1"},
-    {question:"태양의 표면 온도는 약 몇 도일까요?",options:["1,000℃","약 5,500℃","10만℃","100만℃"],answer:1,hint:"🎵 다음 장소: 음표가 춤추는 공간으로!",qrId:"T09S2"},
-    {question:"윤동주의 시에 공통적으로 나타나는 정서는?",options:["분노와 저항","부끄러움과 성찰","즐거움과 유희","풍자와 해학"],answer:1,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T09F"},
+    {question:"여름 밤하늘의 은하수를 가로지르는 별자리는?",options:["오리온자리","백조자리","사자자리","물고기자리"],answer:1,hint:"철 덩어리들이 기다리는 공간, 땀의 성전을 찾아라!",qrId:"T09S1"},
+    {question:"태양의 표면 온도는 약 몇 도일까요?",options:["1,000℃","약 5,500℃","10만℃","100만℃"],answer:1,hint:"슈팅 소리가 울리는 야외 코트를 찾아라!",qrId:"T09S2"},
+    {question:"윤동주의 시에 공통적으로 나타나는 정서는?",options:["분노와 저항","부끄러움과 성찰","즐거움과 유희","풍자와 해학"],answer:1,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T09F"},
   ],
-  // ── 10모둠: 과학34(빛 8분) + 과학40(유성) + 국어19(정지용 출판) ──
+  // ── 10팀: 과학실 → 중1교실 → 선생님 ──
   [
-    {question:"빛이 태양에서 지구까지 오는 데 걸리는 시간은?",options:["1초","1분","약 8분","1시간"],answer:2,hint:"🍽️ 다음 장소: 에너지를 충전하는 곳에서 QR을 찾아라!",qrId:"T10S1"},
-    {question:"별똥별(유성)이 빛나는 이유는?",options:["별이 떨어져서","우주 먼지가 대기와 마찰하여 타면서","번개와 같은 원리","달빛을 반사해서"],answer:1,hint:"💻 다음 장소: 디지털 세계로 통하는 문으로!",qrId:"T10S2"},
-    {question:"윤동주의 시집 '하늘과 바람과 별과 시'를 출판한 사람은?",options:["정지용","이광수","김소월","한용운"],answer:0,hint:"⭐ 최종 목적지로 이동하세요!",qrId:"T10F"},
+    {question:"빛이 태양에서 지구까지 오는 데 걸리는 시간은?",options:["1초","1분","약 8분","1시간"],answer:2,hint:"비커와 플라스크가 사는, 실험과 탐구의 공간을 찾아라!",qrId:"T10S1"},
+    {question:"별똥별(유성)이 빛나는 이유는?",options:["별이 떨어져서","우주 먼지가 대기와 마찰하여 타면서","번개와 같은 원리","달빛을 반사해서"],answer:1,hint:"도개의 가장 어린 별들이 머무는 보금자리를 찾아라!",qrId:"T10S2"},
+    {question:"윤동주의 시집 '하늘과 바람과 별과 시'를 출판한 사람은?",options:["정지용","이광수","김소월","한용운"],answer:0,hint:"🧑‍🏫 운동장에 있는 [OOO] 선생님을 찾아 미션을 수행하시오!",qrId:"T10F"},
   ],
 ];
+
+// B조 퀴즈: 질문 순서 [Q3,Q1,Q2] + 동선 [L2,L1,Final]
+// → 질문은 회전하되, 중간 동선은 역방향, 최종은 동일
+const QUIZZES_B = QUIZZES.map(aq => [
+  // B Stage 0: A의 Q3(질문) + A의 L2(힌트/QR) → L2로 먼저 감
+  { question: aq[2].question, options: aq[2].options, answer: aq[2].answer, hint: aq[1].hint, qrId: aq[1].qrId },
+  // B Stage 1: A의 Q1(질문) + A의 L1(힌트/QR) → L1으로 감
+  { question: aq[0].question, options: aq[0].options, answer: aq[0].answer, hint: aq[0].hint, qrId: aq[0].qrId },
+  // B Stage 2: A의 Q2(질문) + A의 Final(힌트/QR) → 선생님(최종)으로 감
+  { question: aq[1].question, options: aq[1].options, answer: aq[1].answer, hint: aq[2].hint, qrId: aq[2].qrId },
+]);
+// 전체 20팀 퀴즈: 0-9=A조, 10-19=B조
+function getQuiz(teamIdx, stage) {
+  if (teamIdx < 10) return QUIZZES[teamIdx][stage];
+  return QUIZZES_B[teamIdx - 10][stage];
+}
+// 팀 인덱스 → 조/번호/별자리 위치
+function teamGroup(t) { return t < 10 ? 'A' : 'B'; }
+function teamNum(t) { return (t % 10) + 1; }
+function teamLabel(t) { return `${teamGroup(t)}-${teamNum(t)}`; }
+function starIdx(t) { return t % 10; } // 별자리 위치 (0-9)
 
 // ════════════════════════════════════════════════
 //  앱 상태
 // ════════════════════════════════════════════════
 let S = {
-  view: 'splash', team: null, members: ['','',''], stage: 0,
-  arrived: Array(10).fill(false), msgSent: false, photoUrl: '',
+  view: 'splash', team: null, group: null, members: ['','',''], stage: 0,
+  arrived: Array(20).fill(false), msgSent: false, photoUrl: '',
   flashOn: false, adminPw: '', pwError: false,
   adminTaps: 0, tapTimer: null, qrScanning: false,
   penalty: false, penaltyTimer: null, penaltyCount: 0,
   teamData: {},
-  registeredTeams: Array(10).fill(false) // 이미 등록된 모둠
+  registeredTeams: Array(20).fill(false)
 };
 
 let db, storage, unsubTeams, unsubState;
@@ -202,7 +223,7 @@ const LS_KEY = 'starnight_session';
 
 function saveSession() {
   try {
-    const data = { team: S.team, members: S.members, stage: S.stage, ts: Date.now() };
+    const data = { team: S.team, group: S.group, members: S.members, stage: S.stage, ts: Date.now() };
     localStorage.setItem(LS_KEY, JSON.stringify(data));
   } catch(e) {}
 }
@@ -223,9 +244,9 @@ function restoreSession() {
   const saved = loadSession();
   if (!saved || saved.team === null || saved.team === undefined) return false;
   S.team = saved.team;
+  S.group = saved.group || (saved.team < 10 ? 'A' : 'B');
   S.members = saved.members || ['','',''];
   S.stage = saved.stage || 0;
-  // Firestore에서 해당 팀이 아직 존재하는지 확인
   if (db) {
     db.collection(COLLECTION).doc('team_' + S.team).get().then(doc => {
       if (doc.exists) {
@@ -241,14 +262,12 @@ function restoreSession() {
         listenState();
         render();
       } else {
-        // Firestore에 없음 = 관리자가 초기화함
         clearSession();
-        S.team = null;
+        S.team = null; S.group = null;
         S.view = 'splash';
         render();
       }
     }).catch(() => {
-      // 오프라인이면 저장된 상태로 진행
       S.view = 'quiz';
       render();
     });
@@ -272,11 +291,13 @@ function initFirebase() {
 }
 
 // 팀 등록
-async function registerTeam(teamNum, members) {
+async function registerTeam(teamIdx, members) {
   if (!db) return;
-  const id = 'team_' + teamNum;
+  const id = 'team_' + teamIdx;
   await db.collection(COLLECTION).doc(id).set({
-    teamNumber: teamNum,
+    teamIndex: teamIdx,
+    group: teamGroup(teamIdx),
+    teamNumber: teamNum(teamIdx),
     members: members.filter(m => m.trim()),
     currentStage: 0,
     arrived: false,
@@ -285,15 +306,15 @@ async function registerTeam(teamNum, members) {
 }
 
 // 스테이지 업데이트
-async function updateStage(teamNum, newStage) {
+async function updateStage(teamIdx, newStage) {
   if (!db) return;
-  await db.collection(COLLECTION).doc('team_' + teamNum).update({ currentStage: newStage });
+  await db.collection(COLLECTION).doc('team_' + teamIdx).update({ currentStage: newStage });
 }
 
 // 최종 도착 기록
-async function markArrived(teamNum) {
+async function markArrived(teamIdx) {
   if (!db) return;
-  await db.collection(COLLECTION).doc('team_' + teamNum).update({ arrived: true });
+  await db.collection(COLLECTION).doc('team_' + teamIdx).update({ arrived: true });
 }
 
 // 관리자: 메시지 전송
@@ -317,7 +338,7 @@ async function resetGame() {
   if (!db) return;
   const batch = db.batch();
   batch.set(db.collection(COLLECTION).doc('_state'), { messageSent: false, photoUrl: '' });
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 20; i++) {
     batch.delete(db.collection(COLLECTION).doc('team_' + i));
   }
   await batch.commit();
@@ -326,16 +347,16 @@ async function resetGame() {
 // 실시간 리스너: 팀 상태
 function listenTeams() {
   if (!db) return;
-  if (unsubTeams) unsubTeams(); // 중복 방지
+  if (unsubTeams) unsubTeams();
   unsubTeams = db.collection(COLLECTION).onSnapshot(snap => {
-      const newArrived = Array(10).fill(false);
-      const newRegistered = Array(10).fill(false);
+      const newArrived = Array(20).fill(false);
+      const newRegistered = Array(20).fill(false);
       const teamData = {};
       snap.forEach(doc => {
-        if (doc.id === '_state') return; // 상태 문서 제외
+        if (doc.id === '_state') return;
         const d = doc.data();
-        const idx = d.teamNumber;
-        if (idx !== undefined && idx >= 0 && idx < 10) {
+        const idx = d.teamIndex;
+        if (idx !== undefined && idx >= 0 && idx < 20) {
           newArrived[idx] = !!d.arrived;
           newRegistered[idx] = true;
           teamData['team_' + idx] = d;
@@ -528,26 +549,35 @@ function renderAdminPw() {
 function renderTeamSelect() {
   app().innerHTML = starFieldSVG() + `
   <div class="wrap">
-    <button class="back-btn" onclick="go('splash')">← 뒤로</button>
-    <h2 class="title">모둠을 선택하세요</h2>
-    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠 번호를 선택한 뒤 탐험을 시작합니다</p>
-    <div class="team-grid">
-      ${Array.from({length:10},(_,i) => {
-        const taken = S.registeredTeams[i];
-        const sel = S.team === i;
-        return `
-        <button class="team-btn ${sel?'sel':''} ${taken?'taken':''}" ${taken?'disabled':''} onclick="${taken?'':'S.team='+i+';render()'}" style="${sel&&!taken?`background:${COLORS[i]}18;border-color:${COLORS[i]}60`:''}">
-          <div class="team-circle" style="background:${COLORS[i]}25;border:2px solid ${COLORS[i]}50;color:${COLORS[i]}">${i+1}</div>
-          <div style="font-size:14px;font-weight:700">${i+1}모둠</div>
-        </button>`;
-      }).join('')}
-    </div>
-    ${S.team !== null && !S.registeredTeams[S.team] ? `<button class="btn" id="team-proceed-btn">${S.team+1}모둠 선택</button>` : ''}
+    <button class="back-btn" onclick="${S.group?'S.group=null;S.team=null;render()':'go(\"splash\")'}">${S.group?'← 조 선택':'← 뒤로'}</button>
+    ${!S.group ? `
+      <h2 class="title">조를 선택하세요</h2>
+      <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">A조 또는 B조를 선택한 뒤 모둠 번호를 고릅니다</p>
+      <div style="display:flex;gap:12px">
+        <button class="btn" style="flex:1;font-size:20px;padding:24px" onclick="S.group='A';render()">A조</button>
+        <button class="btn" style="flex:1;font-size:20px;padding:24px" onclick="S.group='B';render()">B조</button>
+      </div>
+    ` : `
+      <h2 class="title">${S.group}조 — 모둠 선택</h2>
+      <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠 번호를 선택한 뒤 탐험을 시작합니다</p>
+      <div class="team-grid">
+        ${Array.from({length:10},(_,i) => {
+          const idx = S.group === 'A' ? i : i + 10;
+          const taken = S.registeredTeams[idx];
+          const sel = S.team === idx;
+          return `
+          <button class="team-btn ${sel?'sel':''} ${taken?'taken':''}" ${taken?'disabled':''} onclick="${taken?'':'S.team='+idx+';render()'}" style="${sel&&!taken?`background:${COLORS[i]}18;border-color:${COLORS[i]}60`:''}">
+            <div class="team-circle" style="background:${COLORS[i]}25;border:2px solid ${COLORS[i]}50;color:${COLORS[i]}">${i+1}</div>
+            <div style="font-size:14px;font-weight:700">${S.group}-${i+1}</div>
+          </button>`;
+        }).join('')}
+      </div>
+      ${S.team !== null && !S.registeredTeams[S.team] ? `<button class="btn" id="team-proceed-btn">${teamLabel(S.team)} 선택</button>` : ''}
+    `}
   </div>`;
   const proceedBtn = $('team-proceed-btn');
   if (proceedBtn) {
     proceedBtn.addEventListener('click', async () => {
-      // Firestore에서 한 번 더 확인 (다른 기기가 방금 등록했을 수 있음)
       if (db) {
         const doc = await db.collection(COLLECTION).doc('team_' + S.team).get();
         if (doc.exists && doc.data().members) {
@@ -568,7 +598,7 @@ function renderMemberInput() {
   app().innerHTML = starFieldSVG() + `
   <div class="wrap">
     <button class="back-btn" onclick="go('teamSelect')">← 모둠 선택</button>
-    <h2 class="title">${S.team+1}모둠 참가자</h2>
+    <h2 class="title">${teamLabel(S.team)} 참가자</h2>
     <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">모둠원 이름을 입력해 주세요</p>
     <div class="card">
       ${S.members.map((m,i) => `
@@ -617,13 +647,13 @@ function clearPenalty() {
 
 function renderQuiz() {
   clearPenalty();
-  const q = QUIZZES[S.team][S.stage];
+  const q = getQuiz(S.team, S.stage);
   const isFinal = S.stage === 2;
-  const c = COLORS[S.team];
+  const c = COLORS[S.team % 10];
   app().innerHTML = starFieldSVG() + `
   <div class="wrap">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <span class="tag" style="background:${c}20;border:1px solid ${c}40;color:${c}">${S.team+1}모둠</span>
+      <span class="tag" style="background:${c}20;border:1px solid ${c}40;color:${c}">${teamLabel(S.team)}</span>
       <div style="display:flex;gap:6px">${[0,1,2].map(i => `<div class="dot ${i===S.stage?'active':i<S.stage?'done':'idle'}"></div>`).join('')}</div>
     </div>
     <div class="card">
@@ -682,15 +712,22 @@ function renderQuiz() {
 
 // ── 힌트 ──
 function renderHint() {
-  const q = QUIZZES[S.team][S.stage];
+  const q = getQuiz(S.team, S.stage);
   const isFinal = S.stage === 2;
+  const isTeacherStage = isFinal;
   app().innerHTML = starFieldSVG() + `
   <div class="wrap center">
     <div class="card" style="text-align:center">
-      <div style="font-size:48px;margin-bottom:16px">🗺️</div>
-      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isFinal?'최종 목적지 힌트':`${S.stage+1}번째 장소 힌트`}</div>
-      <p style="font-size:18px;line-height:1.7;margin-bottom:24px;font-weight:600;color:var(--accent)">${q.hint}</p>
-      <p style="font-size:13px;color:var(--dim);margin-bottom:24px">목적지에 도착하면 QR코드를 스캔하세요</p>
+      <div style="font-size:48px;margin-bottom:16px">${isTeacherStage ? '🧑‍🏫' : '🗺️'}</div>
+      <div style="font-size:12px;color:var(--dim);margin-bottom:8px">${isTeacherStage ? '최종 미션' : `${S.stage+1}번째 장소 힌트`}</div>
+      <p style="font-size:18px;line-height:1.7;margin-bottom:16px;font-weight:600;color:var(--accent)">${q.hint}</p>
+      ${isTeacherStage ? `
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px;margin-bottom:20px">
+          <p style="font-size:13px;color:var(--sub);line-height:1.6;margin:0">선생님에게 미션을 받은 뒤<br>안내받은 최종 장소로 이동하여<br>QR코드를 스캔하세요</p>
+        </div>
+      ` : `
+        <p style="font-size:13px;color:var(--dim);margin-bottom:24px">목적지에 도착하면 QR코드를 스캔하세요</p>
+      `}
       <button class="btn" onclick="go('scan')">📷 QR코드 스캔하기</button>
     </div>
   </div>`;
@@ -698,7 +735,7 @@ function renderHint() {
 
 // ── QR 스캔 ──
 function renderScan() {
-  const q = QUIZZES[S.team][S.stage];
+  const q = getQuiz(S.team, S.stage);
   app().innerHTML = starFieldSVG() + `
   <div class="wrap center">
     <div class="card" style="text-align:center">
@@ -771,14 +808,14 @@ function renderArrived() {
     <div class="card" style="text-align:center">
       ${!S.msgSent ? `
         <div style="font-size:48px;margin-bottom:12px">🎉</div>
-        <h2 class="title" style="font-size:22px">${S.team+1}모둠 도착 완료!</h2>
+        <h2 class="title" style="font-size:22px">${teamLabel(S.team)} 도착 완료!</h2>
         <p style="font-size:14px;color:var(--sub);margin-bottom:24px">최종 목적지에 도착했습니다</p>
         <div style="background:rgba(100,140,255,0.07);border:1px solid rgba(100,140,255,0.18);border-radius:12px;padding:24px;margin-bottom:16px">
           <div style="margin-bottom:12px"><span style="animation:pulse 1.5s ease infinite;font-size:32px">⏳</span></div>
           <p style="font-size:16px;font-weight:700;color:#a0c4ff;margin-bottom:8px">다른 모둠을 기다리는 중입니다</p>
           <p style="font-size:13px;color:var(--dim);line-height:1.6">모든 모둠이 목적지에 도착할 때까지<br>현재 위치에서 대기해 주세요!</p>
         </div>
-        <div style="font-size:13px;color:var(--dim)">현재 도착: ${cnt} / 10 모둠</div>
+        <div style="font-size:13px;color:var(--dim)">현재 도착: ${cnt} / 20 모둠</div>
       ` : `
         <div style="font-size:20px;margin-bottom:8px">📢</div>
         <h2 class="title" style="font-size:22px">미션이 도착했습니다!</h2>
@@ -805,41 +842,60 @@ function renderArrived() {
 function renderAdmin() {
   const cnt = S.arrived.filter(Boolean).length;
   const allOk = S.arrived.every(Boolean);
+  // 별자리: 각 위치에 A/B 중 하나라도 도착하면 밝히기
+  const starArrived = Array(10).fill(false);
+  for (let i = 0; i < 10; i++) starArrived[i] = S.arrived[i] || S.arrived[i + 10];
+
   app().innerHTML = starFieldSVG() + `
   <div class="wrap no-print">
     <button class="back-btn" onclick="go('splash')">← 나가기</button>
     <h2 class="title">🔭 관리자 모드</h2>
-    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">여름 대삼각형 + 백조자리 (10모둠)</p>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:24px;line-height:1.5">A조 10팀 + B조 10팀 = 20모둠</p>
 
     <div class="card" style="margin-bottom:16px">
       <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">별자리 완성 현황</h3>
-      ${constellationSVG(S.arrived, 360)}
+      ${constellationSVG(starArrived, 360)}
     </div>
 
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">모둠별 현황</h3>
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">모둠별 현황 (위치별)</h3>
       ${STARS_ADMIN.map((s,i) => {
-        const td = S.teamData['team_'+i];
-        const registered = S.registeredTeams[i];
-        const memberCount = td ? (td.members?.length || 0) : 0;
-        const stageInfo = td ? (td.arrived ? '도착 완료' : `${(td.currentStage||0)+1}번째 문제`) : '';
+        const aIdx = i, bIdx = i + 10;
+        const aData = S.teamData['team_' + aIdx];
+        const bData = S.teamData['team_' + bIdx];
+        const aReg = S.registeredTeams[aIdx], bReg = S.registeredTeams[bIdx];
+        const aMem = aData?.members?.length || 0, bMem = bData?.members?.length || 0;
         return `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;${i<9?'border-bottom:1px solid rgba(255,255,255,0.04)':''}">
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-weight:700;color:${COLORS[i]}">${i+1}모둠</span>
-              <span style="font-size:10px;color:var(--dim)">${s.ko}</span>
-              ${registered ? `<button class="member-popup-btn" data-idx="${i}" style="padding:2px 8px;border-radius:10px;font-size:10px;background:rgba(100,140,255,0.1);border:1px solid rgba(100,140,255,0.2);color:#a0b8ff;cursor:pointer;font-family:inherit">👤 ${memberCount}명</button>` : ''}
-            </div>
-            ${registered ? `<div style="font-size:10px;color:var(--dim);margin-top:2px">${stageInfo}</div>` : '<div style="font-size:10px;color:var(--dim);margin-top:2px">미등록</div>'}
+        <div style="padding:10px 0;${i<9?'border-bottom:1px solid rgba(255,255,255,0.04)':''}">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <span style="font-weight:700;color:${COLORS[i]}">${i+1}번 위치</span>
+            <span style="font-size:10px;color:var(--dim)">${s.ko} (${s.en})</span>
           </div>
-          <div style="display:flex;align-items:center;gap:6px">
-            <span class="badge ${S.arrived[i]?'badge-on':registered?'badge-off':'badge-taken'}">${S.arrived[i]?'도착 ✓':registered?'진행 중':'미등록'}</span>
-            <button class="arrive-toggle" data-idx="${i}" style="padding:4px 8px;border-radius:8px;font-size:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--dim);cursor:pointer;font-family:inherit">토글</button>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;padding:6px 8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;font-size:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span>A-${i+1}</span>
+                <div style="display:flex;align-items:center;gap:4px">
+                  ${aReg ? `<button class="member-popup-btn" data-idx="${aIdx}" style="padding:1px 6px;border-radius:8px;font-size:9px;background:rgba(100,140,255,0.1);border:1px solid rgba(100,140,255,0.2);color:#a0b8ff;cursor:pointer;font-family:inherit">👤${aMem}</button>` : ''}
+                  <span class="badge ${S.arrived[aIdx]?'badge-on':aReg?'badge-off':'badge-taken'}" style="font-size:9px;padding:2px 6px">${S.arrived[aIdx]?'도착':aReg?'진행':'미등록'}</span>
+                  <button class="arrive-toggle" data-idx="${aIdx}" style="padding:2px 6px;border-radius:6px;font-size:9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--dim);cursor:pointer;font-family:inherit">⇄</button>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;padding:6px 8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;font-size:12px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span>B-${i+1}</span>
+                <div style="display:flex;align-items:center;gap:4px">
+                  ${bReg ? `<button class="member-popup-btn" data-idx="${bIdx}" style="padding:1px 6px;border-radius:8px;font-size:9px;background:rgba(100,140,255,0.1);border:1px solid rgba(100,140,255,0.2);color:#a0b8ff;cursor:pointer;font-family:inherit">👤${bMem}</button>` : ''}
+                  <span class="badge ${S.arrived[bIdx]?'badge-on':bReg?'badge-off':'badge-taken'}" style="font-size:9px;padding:2px 6px">${S.arrived[bIdx]?'도착':bReg?'진행':'미등록'}</span>
+                  <button class="arrive-toggle" data-idx="${bIdx}" style="padding:2px 6px;border-radius:6px;font-size:9px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:var(--dim);cursor:pointer;font-family:inherit">⇄</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>`;
       }).join('')}
-      <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--dim)">${cnt} / 10 모둠 도착</div>
+      <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--dim)">${cnt} / 20 모둠 도착</div>
     </div>
 
     <!-- 모둠원 팝업 -->
@@ -860,7 +916,7 @@ function renderAdmin() {
         </div>
       ` : `
         <p style="font-size:13px;color:var(--dim);margin-bottom:12px;line-height:1.5">${allOk?'모든 모둠이 도착했습니다! 메시지를 전송하세요.':'모든 모둠이 도착하면 버튼이 활성화됩니다.'}</p>
-        <button class="btn btn-gold ${allOk?'':'btn-off'}" id="send-msg-btn">${allOk?'📢 라이트 비추기 메시지 전송':'⏳ 대기 중 ('+cnt+'/10)'}</button>
+        <button class="btn btn-gold ${allOk?'':'btn-off'}" id="send-msg-btn">${allOk?'📢 라이트 비추기 메시지 전송':'⏳ 대기 중 ('+cnt+'/20)'}</button>
       `}
     </div>
 
@@ -891,7 +947,7 @@ function renderAdmin() {
     btn.addEventListener('click', () => {
       const i = +btn.dataset.idx;
       S.arrived[i] = !S.arrived[i];
-      if (db) db.collection(COLLECTION).doc('team_'+i).set({teamNumber:i, arrived:S.arrived[i]},{merge:true});
+      if (db) db.collection(COLLECTION).doc('team_'+i).set({teamIndex:i, arrived:S.arrived[i]},{merge:true});
       render();
     });
   });
@@ -906,9 +962,10 @@ function renderAdmin() {
       const modal = $('member-modal');
       const content = $('modal-content');
       if (modal && content) {
+        const si = starIdx(i);
         content.innerHTML = `
-          <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:${COLORS[i]}">${i+1}모둠 구성원</h3>
-          <p style="font-size:11px;color:var(--dim);margin-bottom:12px">${STARS_ADMIN[i].ko} (${STARS_ADMIN[i].en}) · ${STARS_ADMIN[i].part}</p>
+          <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:${COLORS[si]}">${teamLabel(i)} 구성원</h3>
+          <p style="font-size:11px;color:var(--dim);margin-bottom:12px">${STARS_ADMIN[si].ko} (${STARS_ADMIN[si].en}) · ${STARS_ADMIN[si].part}</p>
           ${members.length > 0 ? members.map((m,j) => `
             <div style="padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;margin-bottom:6px;font-size:14px">
               <span style="color:var(--dim);margin-right:8px">${j+1}.</span>${m}
@@ -948,8 +1005,8 @@ function renderAdmin() {
     if (confirm('정말로 모든 게임 데이터를 초기화하시겠습니까?\n\n학생 기기의 세션은 다음 접속 시 자동으로 초기화됩니다.')) {
       resetGame();
       clearSession();
-      S.arrived = Array(10).fill(false);
-      S.registeredTeams = Array(10).fill(false);
+      S.arrived = Array(20).fill(false);
+      S.registeredTeams = Array(20).fill(false);
       S.msgSent = false;
       S.photoUrl = '';
       S.teamData = {};
