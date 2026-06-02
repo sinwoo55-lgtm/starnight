@@ -323,6 +323,9 @@ async function sendMessage() {
   await db.collection(COLLECTION).doc('_state').set({ messageSent: true, photoUrl: S.photoUrl || '' }, { merge: true });
 }
 
+// 실제 별자리 참고 이미지 (앱 내장)
+const REF_CONSTELLATION_IMG = './constellation.png';
+
 // 관리자: 사진 업로드
 async function uploadPhoto(file) {
   if (!storage) return null;
@@ -828,9 +831,12 @@ function renderArrived() {
           <p style="font-size:12px;color:var(--dim);line-height:1.6">아이폰: 화면 우측 상단에서 아래로 스와이프 → 🔦<br>안드로이드: 화면 상단에서 아래로 스와이프 → 🔦</p>
         </div>
         ${S.photoUrl ? `
-          <div style="margin-top:12px">
-            <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 작품</h3>
-            <img src="${S.photoUrl}" alt="결과" style="width:100%;border-radius:12px;display:block">
+          <div style="margin-top:16px">
+            <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 별자리</h3>
+            <p style="font-size:12px;color:var(--sub);margin-bottom:6px">우리의 별빛</p>
+            <img src="${S.photoUrl}" alt="우리의 별자리" style="width:100%;border-radius:12px;display:block;margin-bottom:16px">
+            <p style="font-size:12px;color:var(--sub);margin-bottom:6px">실제 별자리</p>
+            <img src="${REF_CONSTELLATION_IMG}" alt="실제 별자리" style="width:100%;border-radius:12px;display:block">
           </div>
         ` : ''}
       `}
@@ -921,10 +927,11 @@ function renderAdmin() {
     </div>
 
     <div class="card" style="margin-bottom:16px">
-      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">📸 결과 사진 업로드</h3>
+      <h3 style="font-size:14px;color:var(--sub);margin-bottom:12px">📸 별자리 사진 업로드</h3>
+      <p style="font-size:12px;color:var(--dim);margin-bottom:12px;line-height:1.5">학생들이 만든 별자리 사진을 업로드하면,<br>실제 별자리 사진과 함께 학생 화면에 표시됩니다.</p>
       ${S.photoUrl ? `
-        <img src="${S.photoUrl}" alt="업로드됨" style="width:100%;border-radius:12px;margin-bottom:12px">
-        <p style="font-size:12px;color:#6fdf8a;text-align:center">✅ 사진이 업로드되었습니다</p>
+        <img src="${S.photoUrl}" alt="우리의 별자리" style="width:100%;border-radius:12px;margin-bottom:8px">
+        <p style="font-size:11px;color:#6fdf8a;text-align:center;margin-bottom:12px">✅ 업로드 완료 — 학생 화면에 실제 별자리와 함께 표시됩니다</p>
       ` : `
         <input type="file" accept="image/*" id="photo-input" style="display:none">
         <button class="btn" id="photo-btn">사진 선택</button>
@@ -993,7 +1000,6 @@ function renderAdmin() {
         const url = await uploadPhoto(file);
         if (url) { S.photoUrl = url; render(); }
       } catch(err) {
-        // Storage 안 되면 로컬 미리보기
         S.photoUrl = URL.createObjectURL(file);
         render();
       }
