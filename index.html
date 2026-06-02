@@ -819,21 +819,21 @@ function renderArrived() {
           <p style="font-size:13px;color:var(--dim);line-height:1.6">모든 모둠이 목적지에 도착할 때까지<br>현재 위치에서 대기해 주세요!</p>
         </div>
         <div style="font-size:13px;color:var(--dim)">현재 도착: ${cnt} / 20 모둠</div>
+      ` : S.photoUrl ? `
+        <div style="font-size:20px;margin-bottom:8px">🌌</div>
+        <h2 class="title" style="font-size:22px">우리가 만든 별자리</h2>
+        <div style="margin-top:16px">
+          <p style="font-size:12px;color:var(--sub);margin-bottom:6px">우리의 별빛</p>
+          <img src="${S.photoUrl}" alt="우리의 별자리" style="width:100%;border-radius:12px;display:block;margin-bottom:16px">
+          <p style="font-size:12px;color:var(--sub);margin-bottom:6px">실제 별자리</p>
+          <img src="${REF_CONSTELLATION_IMG}" alt="실제 별자리" style="width:100%;border-radius:12px;display:block">
+        </div>
       ` : `
         <div style="font-size:20px;margin-bottom:8px">📢</div>
         <h2 class="title" style="font-size:22px">미션이 도착했습니다!</h2>
         <div style="background:rgba(255,200,80,0.07);border:1px solid rgba(255,200,80,0.18);border-radius:12px;padding:24px;margin:16px 0">
           <p style="font-size:18px;font-weight:700;color:var(--accent);line-height:1.6">📱 A조의 조장만<br>핸드폰 라이트를 켜서<br>도서관쪽 옥상으로 비춰주세요</p>
         </div>
-        ${S.photoUrl ? `
-          <div style="margin-top:16px">
-            <h3 style="font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px">🌌 우리가 만든 별자리</h3>
-            <p style="font-size:12px;color:var(--sub);margin-bottom:6px">우리의 별빛</p>
-            <img src="${S.photoUrl}" alt="우리의 별자리" style="width:100%;border-radius:12px;display:block;margin-bottom:16px">
-            <p style="font-size:12px;color:var(--sub);margin-bottom:6px">실제 별자리</p>
-            <img src="${REF_CONSTELLATION_IMG}" alt="실제 별자리" style="width:100%;border-radius:12px;display:block">
-          </div>
-        ` : ''}
       `}
     </div>
   </div>`;
